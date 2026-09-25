@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="Royal Library — Digital Library Management and Personalized Book Recommendation System">
 <title>Royal Library</title>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f7f3;color:#17231e}
@@ -34,34 +34,13 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
 </head>
 <body>
 <div id="app"></div>
-
 <script>
-const API_BASE = window.ROYAL_LIBRARY_API || window.location.origin + '/api';
-let currentUser = null;
-let authToken = localStorage.getItem('royal_library_token') || '';
-
-async function api(path, options={}) {
-  const headers = {'Content-Type':'application/json', ...(options.headers||{})};
-  if (authToken) headers.Authorization = `Bearer ${authToken}`;
-  const res = await fetch(API_BASE + path, {...options, headers});
-  let body = {};
-  try { body = await res.json(); } catch (_) {}
-  if (!res.ok) throw new Error(body.error || body.message || `Request failed (${res.status})`);
-  return body;
-}
-function setAuth(token,user){
-  authToken = token || '';
-  currentUser = user || null;
-  if(token) localStorage.setItem('royal_library_token', token);
-  else localStorage.removeItem('royal_library_token');
-}
-
 /* =========================
    ROYAL LIBRARY — SUPABASE
    ========================= */
-const API_BASE = window.ROYAL_LIBRARY_API || window.location.origin + '/api';
-let currentUser = null;
-
+const SUPABASE_URL='https://lddwtgmfeuvbashydsvg.supabase.co';
+const SUPABASE_KEY='sb_publishable_Zcha782B8PVp6mKL1pHskw_AEpTi6pp';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 let state={
   page:'home', query:'', category:'All', selected:null, user:null,
@@ -92,8 +71,8 @@ async function apiError(error,context){
 /* ---------- data loading ---------- */
 async function loadPublic(){
   const [books,cats]=await Promise.all([
-    renderDbRemoved.from('books').select('*').order('created_at',{ascending:false}),
-    renderDbRemoved.from('categories').select('*').order('name')
+    sb.from('books').select('*').order('created_at',{ascending:false}),
+    sb.from('categories').select('*').order('name')
   ]);
   if(books.error){await apiError(books.error,'Loading books');return false}
   if(cats.error){await apiError(cats.error,'Loading categories');return false}
@@ -103,23 +82,23 @@ async function loadPublic(){
 }
 
 async function loadUser(){
-  const {data,error}=await renderAuthRemoved.getSession();
+  const {data,error}=await sb.auth.getSession();
   if(error){await apiError(error,'Checking session');return false}
   state.user=null; state.borrowings=[]; state.favourites=[]; state.preferences=[]; state.notifications=[]; state.activities=[];
   if(!data.session)return true;
 
   const uid=data.session.user.id;
-  const p=await renderDbRemoved.from('profiles').select('*').eq('id',uid).maybeSingle();
+  const p=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
   if(p.error){await apiError(p.error,'Loading profile');return false}
   if(!p.data){toast('Your Auth account exists but its library profile was not created. Check the Supabase profile trigger.','error');return false}
   state.user={...p.data,name:p.data.full_name,active:p.data.status==='active'};
 
   const [bor,fav,pref,notifs,acts]=await Promise.all([
-    renderDbRemoved.from('borrowings').select('*').eq('user_id',uid).order('created_at',{ascending:false}),
-    renderDbRemoved.from('favourites').select('book_id').eq('user_id',uid),
-    renderDbRemoved.from('user_preferences').select('category_id').eq('user_id',uid),
-    renderDbRemoved.from('notifications').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(30),
-    renderDbRemoved.from('activities').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(200)
+    sb.from('borrowings').select('*').eq('user_id',uid).order('created_at',{ascending:false}),
+    sb.from('favourites').select('book_id').eq('user_id',uid),
+    sb.from('user_preferences').select('category_id').eq('user_id',uid),
+    sb.from('notifications').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(30),
+    sb.from('activities').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(200)
   ]);
   if(bor.error||fav.error||pref.error||notifs.error||acts.error){
     const e=bor.error||fav.error||pref.error||notifs.error||acts.error;
@@ -137,9 +116,9 @@ async function loadUser(){
 
 async function loadAdminData(){
   const [profiles,bor,audit]=await Promise.all([
-    renderDbRemoved.from('profiles').select('*').order('created_at',{ascending:false}),
-    renderDbRemoved.from('borrowings').select('*').order('created_at',{ascending:false}),
-    renderDbRemoved.from('admin_logs').select('*').order('created_at',{ascending:false}).limit(100)
+    sb.from('profiles').select('*').order('created_at',{ascending:false}),
+    sb.from('borrowings').select('*').order('created_at',{ascending:false}),
+    sb.from('admin_logs').select('*').order('created_at',{ascending:false}).limit(100)
   ]);
   const e=profiles.error||bor.error||audit.error;
   if(e){await apiError(e,'Loading admin data');return}
@@ -157,9 +136,15 @@ async function registerAction(){
   if(password.length<6)return toast('Password must be at least 6 characters.','error');
   if(password!==confirm)return toast('Passwords do not match.','error');
 
-  const {data,error}=await renderAuthRemoved.signUp({
+  const redirect=location.protocol.startsWith('http')
+    ? window.location.origin+window.location.pathname
+    : undefined;
+  const {data,error}=await sb.auth.signUp({
     email,password,
-    options:{data:{full_name:name}}
+    options:{
+      data:{full_name:name},
+      ...(redirect?{emailRedirectTo:redirect}:{})
+    }
   });
   if(error){await apiError(error,'Account creation');return}
 
@@ -176,7 +161,7 @@ async function registerAction(){
 async function loginAction(){
   const email=$('email').value.trim().toLowerCase(),password=$('password').value;
   if(!email||!password)return toast('Enter your email and password.','error');
-  const {error}=await renderAuthRemoved.signInWithPassword({email,password});
+  const {error}=await sb.auth.signInWithPassword({email,password});
   if(error){await apiError(error,'Sign in');return}
   await loadPublic();await loadUser();
   state.page=state.user?.role==='admin'?'admin':'dashboard';render();
@@ -184,7 +169,7 @@ async function loginAction(){
 }
 
 async function logout(){
-  const {error}=await renderAuthRemoved.signOut();
+  const {error}=await sb.auth.signOut();
   if(error)await apiError(error,'Sign out');
   state.user=null;state.borrowings=[];state.favourites=[];state.preferences=[];state.notifications=[];state.activities=[];
   state.page='home';render();
@@ -195,13 +180,13 @@ async function borrow(id){
   if(!state.user){state.page='login';render();return toast('Sign in to borrow a book.','error')}
   if(state.user.status==='suspended')return toast('Your library account is suspended.','error');
   const due=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
-  const {error}=await renderRpcRemoved('borrow_book',{p_book_id:id,p_due_date:due});
+  const {error}=await sb.rpc('borrow_book',{p_book_id:id,p_due_date:due});
   if(error){await apiError(error,'Borrow book');return}
   await loadPublic();await loadUser();state.selected=state.books.find(b=>b.id===id);render();toast('Book borrowed successfully.','success');
 }
 
 async function returnBook(id){
-  const {error}=await renderRpcRemoved('return_book',{p_borrowing_id:id});
+  const {error}=await sb.rpc('return_book',{p_borrowing_id:id});
   if(error){await apiError(error,'Return book');return}
   await loadPublic();await loadUser();render();toast('Book returned successfully.','success');
 }
@@ -210,27 +195,27 @@ async function toggleFavorite(id){
   if(!state.user){state.page='login';render();return}
   const exists=state.favourites.includes(id);
   const q=exists
-    ? renderDbRemoved.from('favourites').delete().eq('user_id',state.user.id).eq('book_id',id)
-    : renderDbRemoved.from('favourites').insert({user_id:state.user.id,book_id:id});
+    ? sb.from('favourites').delete().eq('user_id',state.user.id).eq('book_id',id)
+    : sb.from('favourites').insert({user_id:state.user.id,book_id:id});
   const {error}=await q;
   if(error){await apiError(error,'Favourite');return}
   await loadUser();render();toast(exists?'Removed from favourites.':'Added to favourites.','success');
 }
 
 async function saveProfile(){
-  const name=$('pn').value.trim(),email=$('pe').value.trim().toLowerCase();
-  if(name.length<2||!/^\S+@\S+\.\S+$/.test(email))return toast('Enter a valid name and email.','error');
-  const {error}=await renderDbRemoved.from('profiles').update({full_name:name,email}).eq('id',state.user.id);
+  const name=$('pn').value.trim();
+  if(name.length<2)return toast('Enter a valid name.','error');
+  const {error}=await sb.from('profiles').update({full_name:name}).eq('id',state.user.id);
   if(error){await apiError(error,'Update profile');return}
   await loadUser();render();toast('Profile updated.','success');
 }
 
 async function savePreferences(){
   const ids=[...document.querySelectorAll('.pref-check:checked')].map(x=>x.value);
-  const d=await renderDbRemoved.from('user_preferences').delete().eq('user_id',state.user.id);
+  const d=await sb.from('user_preferences').delete().eq('user_id',state.user.id);
   if(d.error){await apiError(d.error,'Clear preferences');return}
   if(ids.length){
-    const i=await renderDbRemoved.from('user_preferences').insert(ids.map(category_id=>({user_id:state.user.id,category_id})));
+    const i=await sb.from('user_preferences').insert(ids.map(category_id=>({user_id:state.user.id,category_id})));
     if(i.error){await apiError(i.error,'Save preferences');return}
   }
   await loadUser();render();toast('Reading interests saved.','success');
@@ -240,7 +225,7 @@ async function changePassword(){
   const p=$('newPassword').value,c=$('confirmPassword').value;
   if(p.length<6)return toast('Password must be at least 6 characters.','error');
   if(p!==c)return toast('Passwords do not match.','error');
-  const {error}=await renderAuthRemoved.updateUser({password:p});
+  const {error}=await sb.auth.updateUser({password:p});
   if(error){await apiError(error,'Change password');return}
   $('newPassword').value='';$('confirmPassword').value='';
   toast('Password changed successfully.','success');
@@ -265,10 +250,10 @@ async function saveBook(){
     const borrowed=(b.total_copies||0)-(b.available_copies||0);
     data.total_copies=Math.max(copies,borrowed);
     data.available_copies=data.total_copies-borrowed;
-    result=await renderDbRemoved.from('books').update(data).eq('id',b.id);
+    result=await sb.from('books').update(data).eq('id',b.id);
   }else{
     data.total_copies=copies;data.available_copies=copies;
-    result=await renderDbRemoved.from('books').insert(data);
+    result=await sb.from('books').insert(data);
   }
   if(result.error){await apiError(result.error,'Save book');return}
   state.editingBook=null;await loadPublic();await loadUser();render();toast('Book saved.','success');
@@ -276,7 +261,7 @@ async function saveBook(){
 
 async function deleteBook(id){
   if(!confirm('Delete this book from the catalogue?'))return;
-  const {error}=await renderDbRemoved.from('books').delete().eq('id',id);
+  const {error}=await sb.from('books').delete().eq('id',id);
   if(error){await apiError(error,'Delete book');return}
   await loadPublic();await loadUser();render();toast('Book deleted.','success');
 }
@@ -284,7 +269,7 @@ async function deleteBook(id){
 async function toggleMember(id){
   const u=state.users.find(x=>x.id===id);if(!u)return;
   const status=u.status==='active'?'suspended':'active';
-  const {error}=await renderDbRemoved.from('profiles').update({status}).eq('id',id);
+  const {error}=await sb.from('profiles').update({status}).eq('id',id);
   if(error){await apiError(error,'Update member');return}
   await loadUser();render();toast(status==='active'?'Member activated.':'Member suspended.','success');
 }
@@ -316,7 +301,7 @@ function home(){
   return `<section class="hero"><div><span class="eyebrow">DIGITAL LIBRARY + PERSONALIZED DISCOVERY</span>
   <h1>Find the next book worth your time.</h1><p>A web-based library management platform for cataloguing, circulation, member accounts and personalized book discovery.</p>
   <div class="actions"><button class="primary" onclick="go('catalog')">Explore catalogue →</button><button class="ghost" onclick="go('login')">Member access</button></div></div>
-  <div class="hero-card"><span class="eyebrow">ROYAL LIBRARY</span><h2>Real library data</h2><p style="color:#c3d0c9">Books, members, borrowing and recommendations are connected to your Supabase database.</p>
+  <div class="hero-card"><span class="eyebrow">ROYAL LIBRARY</span><h2>Real library data</h2><p style="color:#c3d0c9">Books, members, borrowing and recommendations are connected to the library database.</p>
   <div class="signal">✓ Secure authentication<br>✓ Live catalogue<br>✓ Borrowing and returns<br>✓ Personalized discovery</div></div></section>
   <section class="section"><div class="section-head"><div><span class="eyebrow">CATALOGUE</span><h2>Featured books</h2></div><button class="ghost" onclick="go('catalog')">Browse all →</button></div>
   <div class="book-grid">${books.map(card).join('')||'<div class="panel">No books have been added yet.</div>'}</div></section>`;
@@ -367,21 +352,21 @@ function dashboard(){
 }
 
 function memberOverview(active,loans){
- return `<div class="metrics"><div class="metric"><span>Active loans</span><b>${active.length}</b></div><div class="metric"><span>Favourites</span><b>${state.favourites.length}</b></div><div class="metric"><span>History</span><b>${loans.length}</b></div><div class="metric"><span>Notifications</span><b>${state.notifications.filter(x=>!x.is_read).length}</b></div></div>
+ return `<div class="metrics"><div class="metric"><span>Active loans</span><b>${active.length}</b></div><div class="metric"><span>Favourites</span><b>${state.favourites.length}</b></div><div class="metric"><span>History</span><b>${loans.length}</b></div><div class="metric"><span>Notifications</span><b>${state.notifications.filter(x=>!x.read_at).length}</b></div></div>
  <div class="dashboard-grid" style="margin-top:18px"><div class="panel"><h3>Current loans</h3>${active.map(x=>{const b=state.books.find(y=>y.id===x.book_id);return `<div class="loan"><div class="mini">${initials(b?.title)}</div><div><b>${esc(b?.title||'Unknown')}</b><span>Due ${dateOnly(x.due_date)} · ${overdue(x)?'Overdue':'Borrowed'}</span></div><button onclick="returnBook('${x.id}')">Return</button></div>`}).join('')||'<p>No active loans.</p>'}</div>
  <div class="panel"><h3>Recommended for you</h3>${recommendations().slice(0,5).map(b=>`<div class="loan" onclick="details('${b.id}')"><div class="mini">${initials(b.title)}</div><div><b>${esc(b.title)}</b><span>${esc(b.author)} · ${esc(b.category)}</span></div></div>`).join('')||'<p>No recommendations yet.</p>'}</div></div>`;
 }
 
 function recommendations(){
  const pref=new Set(state.preferences.map(id=>getCategory(id)));
- const borrowed=new Set(state.borrowings.map(x=>x.book_id));
+ const borrowed=new Set(state.borrowings.filter(x=>['borrowed','overdue'].includes(x.status)).map(x=>x.book_id));
  return [...state.books].filter(b=>!borrowed.has(b.id)).sort((a,b)=>{
    const pa=pref.has(a.category)?1:0,pb=pref.has(b.category)?1:0;return pb-pa;
  });
 }
 
 function profileView(){
- return `<div class="profile-grid"><div class="panel"><h3>Profile</h3><label class="field">Full name<input id="pn" value="${esc(state.user.name)}"></label><label class="field">Email<input id="pe" value="${esc(state.user.email)}"></label><button class="primary" onclick="saveProfile()">Save profile</button></div>
+ return `<div class="profile-grid"><div class="panel"><h3>Profile</h3><label class="field">Full name<input id="pn" value="${esc(state.user.name)}"></label><label class="field">Email<input id="pe" value="${esc(state.user.email)}" readonly></label><p style="font-size:12px;color:#69736e">Email is managed by your authentication account.</p><button class="primary" onclick="saveProfile()">Save profile</button></div>
  <div class="panel"><h3>Change password</h3><label class="field">New password<input id="newPassword" type="password"></label><label class="field">Confirm password<input id="confirmPassword" type="password"></label><button class="primary" onclick="changePassword()">Change password</button></div></div>`;
 }
 function interestsView(){
@@ -439,14 +424,29 @@ function render(){
 
 /* ---------- connection diagnostics ---------- */
 async function diagnose(){
- console.log('Royal Library Supabase configuration:',{url:SUPABASE_URL,keyPresent:!!SUPABASE_KEY});
+ console.info('Royal Library Supabase configuration:',{url:SUPABASE_URL,keyPresent:Boolean(SUPABASE_KEY)});
  try{
-   const {data,error}=await renderAuthRemoved.getSession();
-   console.log('Supabase auth test:',{data,error});
+   const {data,error}=await sb.auth.getSession();
+   if(error)console.error('Supabase auth test failed:',error);
+   else console.info('Supabase auth test passed. Session:',Boolean(data.session));
  }catch(e){console.error('SUPABASE NETWORK ERROR:',e)}
 }
 
-renderAuthRemoved.onAuthStateChange(async()=>{await loadPublic();await loadUser();render()});
+/* Keep auth callback synchronous. Data reloads are scheduled after the
+   callback so Auth internals are not blocked by database requests. */
+const {data:authListener}=sb.auth.onAuthStateChange((event)=>{
+  if(['SIGNED_IN','SIGNED_OUT','TOKEN_REFRESHED','USER_UPDATED'].includes(event)){
+    setTimeout(async()=>{
+      try{
+        await loadPublic();
+        await loadUser();
+        if(!state.user) state.page='home';
+        else if(event==='SIGNED_IN') state.page=state.user.role==='admin'?'admin':'dashboard';
+        render();
+      }catch(e){console.error('AUTH STATE REFRESH ERROR',e)}
+    },0);
+  }
+});
 
 (async function boot(){
  try{
@@ -454,8 +454,10 @@ renderAuthRemoved.onAuthStateChange(async()=>{await loadPublic();await loadUser(
    if(ok)await loadUser();
  }catch(e){console.error('BOOT ERROR',e)}
  render();
- diagnose();
+ await diagnose();
 })();
+
+window.addEventListener('beforeunload',()=>authListener?.subscription?.unsubscribe());
 </script>
 </body>
 </html>
