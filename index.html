@@ -1,273 +1,461 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="Royal Library — Digital Royal Library Management and Personalized Book Recommendation System">
-<title>Royal Library — Digital Royal Library</title>
-<script>
-// Supabase client configuration. The publishable key is safe for browser use;
-// the project URL will be added once the Supabase project URL is provided.
-window.ROYAL_LIBRARY_SUPABASE = {
-  publishableKey: 'sb_publishable_Zcha782B8PVp6mKL1pHskw_AEpTi6pp',
-  projectUrl: 'https://lddwtgmfeuvbashydsvg.supabase.co'
-};
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Royal Library — Digital Library Management and Personalized Book Recommendation System">
+<title>Royal Library</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f7f3;color:#17231e}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{min-height:100vh}.nav{height:72px;background:#fff;border-bottom:1px solid #e7e8e2;display:flex;align-items:center;gap:26px;padding:0 5%;position:sticky;top:0;z-index:10}.brand{font-weight:900;font-size:23px;letter-spacing:-1px;color:#17352a;cursor:pointer}.brand span{color:#c58a45}.navlinks{display:flex;gap:20px;flex:1}.navlinks button,.nav-action{background:none;color:#66716b;font-weight:600}.navlinks button.active,.navlinks button:hover{color:#17352a}.nav-search{display:flex;align-items:center;gap:8px;background:#f3f4ef;border-radius:999px;padding:9px 14px;width:230px}.nav-search input{border:0;background:none;outline:0;width:100%}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#17352a;color:#fff;font-weight:800}.hero{padding:75px 5% 65px;display:grid;grid-template-columns:1.15fr .85fr;gap:55px;align-items:center;background:linear-gradient(135deg,#f8f7ef,#eef3ed)}.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;color:#8b6a3d}.hero h1{font-size:clamp(42px,6vw,76px);line-height:.98;letter-spacing:-4px;margin:12px 0 22px;max-width:720px}.hero p{font-size:18px;line-height:1.7;color:#65706a;max-width:650px}.actions{display:flex;gap:12px;margin-top:28px}.primary,.ghost{padding:13px 18px;border-radius:10px;font-weight:800}.primary{background:#17352a;color:#fff}.ghost{background:#fff;color:#17352a;border:1px solid #d9ded8}.hero-card{background:#17352a;color:#fff;border-radius:22px;padding:27px;box-shadow:0 20px 50px #17352a20}.hero-card-top{display:flex;justify-content:space-between;color:#b9c9c0;font-size:11px;letter-spacing:1.7px;font-weight:800}.feature{display:flex;gap:22px;align-items:center;margin:38px 0}.cover{width:112px;height:155px;border-radius:7px;display:grid;place-items:end start;padding:14px;color:#fff;font-weight:900;font-size:24px;background:linear-gradient(145deg,#6e927d,#17352a);box-shadow:10px 15px 30px #0003}.cover.gold{background:linear-gradient(145deg,#d9a45f,#754d25)}.cover.blue{background:linear-gradient(145deg,#65859b,#263f4b)}.cover.red{background:linear-gradient(145deg,#a56662,#4b2828)}.feature h2{font-size:30px;margin:7px 0}.feature p{color:#c3d0c9;margin:0}.signal{border-top:1px solid #ffffff22;padding-top:17px;color:#b9c9c0;font-size:13px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#9cc9a7;margin-right:8px}.section,.page{padding:65px 5%;max-width:1400px;margin:auto}.section-head,.page-heading,.dash-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:28px}.section h2,.page h1{font-size:38px;letter-spacing:-1.7px;margin:5px 0}.text-btn{background:none;font-weight:800;color:#17352a}.book-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}.book-card{background:#fff;border:1px solid #e5e7e1;border-radius:15px;overflow:hidden;cursor:pointer;transition:.18s}.book-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #17231e12}.book-card .cover{width:100%;height:220px;border-radius:0;box-shadow:none}.book-info{padding:17px}.category{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#927044;font-weight:800}.book-info h3{margin:7px 0 4px;font-size:19px}.book-info p{margin:0;color:#68736d}.card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:18px}.available{color:#2f7a48;font-weight:800;font-size:12px}.unavailable{color:#9a4c48;font-weight:800;font-size:12px}.card-bottom button{background:none;color:#17352a;font-weight:800}.split{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start;background:#fff;border-top:1px solid #e5e7e1;border-bottom:1px solid #e5e7e1}.split p{color:#65706a;line-height:1.7}.layers{display:grid;gap:12px}.layer{padding:20px;background:#f4f5ef;border-radius:13px;display:grid;grid-template-columns:45px 1fr;column-gap:10px}.layer span{grid-row:span 2;color:#987044;font-weight:900}.layer small{color:#6e7772}.page{min-height:calc(100vh - 72px)}.page-heading{align-items:center}.searchbox{background:#fff;border:1px solid #dfe2dc;padding:12px 15px;border-radius:10px;width:320px}.searchbox input{border:0;outline:0;width:100%}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:25px}.chip{background:#fff;border:1px solid #dfe2dc;border-radius:999px;padding:9px 14px}.chip.active{background:#17352a;color:#fff}.details{display:grid;grid-template-columns:280px 1fr;gap:55px;max-width:950px;margin:25px auto 70px}.details .cover{width:280px;height:380px}.details h1{font-size:52px;margin:8px 0}.details .author{font-size:18px;color:#65706a}.details p{line-height:1.8;color:#5e6963}.meta{display:flex;gap:45px;margin:28px 0}.meta small{display:block;color:#8b948f}.meta b{display:block;margin-top:5px}.tags{display:flex;gap:7px;flex-wrap:wrap;margin:20px 0}.tag{background:#eef1eb;padding:7px 10px;border-radius:999px;font-size:12px}.auth-wrap{min-height:calc(100vh - 72px);display:grid;place-items:center;padding:40px}.auth{background:#fff;border:1px solid #e1e4de;border-radius:18px;padding:34px;width:min(450px,100%)}.auth h1{font-size:38px;margin:8px 0}.auth p{color:#69736e;line-height:1.6}.field{display:block;margin:15px 0;font-weight:700}.field input,.field select,.field textarea{width:100%;padding:12px;margin-top:7px;border:1px solid #dce0da;border-radius:9px;outline:0;background:#fff}.full{width:100%;margin-top:10px}.demo{background:#f5f6f1;border-radius:10px;padding:13px;margin-top:17px;font-size:12px;color:#68726d}.dashboard-grid,.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}.metric,.panel{background:#fff;border:1px solid #e3e6df;border-radius:14px;padding:20px}.metric span{display:block;color:#758079;font-size:12px}.metric b{font-size:30px;display:block;margin-top:5px}.panel-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #edf0eb;padding-bottom:13px;margin-bottom:7px}.panel-head h3{margin:0}.loan,.rec{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #edf0eb}.mini{width:42px;height:54px;border-radius:5px;background:#315b49;color:#fff;display:grid;place-items:center;font-weight:900;font-size:12px}.loan>div:nth-child(2),.rec>div:nth-child(2){flex:1}.loan span,.rec span{display:block;color:#7a847f;font-size:12px;margin-top:3px}.loan button{background:#eef2ed;color:#17352a;padding:7px 10px;border-radius:7px;font-weight:800}.rec{cursor:pointer}.rec strong{color:#8e6b3d}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.wide{grid-column:1/-1}.table{max-height:450px;overflow:auto}.table-row{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid #edf0eb}.table-row span{display:block;color:#78827d;font-size:12px;margin-top:3px}.toast{position:fixed;right:25px;bottom:25px;background:#17352a;color:#fff;padding:13px 18px;border-radius:10px;z-index:100;box-shadow:0 12px 30px #0003}.back{background:none;color:#17352a;font-weight:800;margin-bottom:20px}.empty{text-align:center;padding:60px;background:#fff;border:1px dashed #d7dbd4;border-radius:14px}.footer{padding:35px 5%;border-top:1px solid #e5e7e1;color:#7a837e;text-align:center;font-size:13px}@media(max-width:900px){.hero,.split,.details,.dashboard-grid,.admin-grid{grid-template-columns:1fr}.book-grid{grid-template-columns:repeat(2,1fr)}.metrics{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}.nav-search{margin-left:auto;width:170px}.hero h1{letter-spacing:-2px}.details .cover{width:220px;height:300px}.page-heading{align-items:stretch;flex-direction:column}.searchbox{width:100%}}@media(max-width:560px){.book-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.nav{padding:0 4%;gap:12px}.nav-search{width:135px}.hero,.section,.page{padding-left:4%;padding-right:4%}.hero h1{font-size:44px}.form-grid{grid-template-columns:1fr}.wide{grid-column:auto}}
-
-.admin-shell{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 72px);background:#f3f5f1}.admin-side{background:#17352a;color:#fff;padding:25px 15px;position:sticky;top:72px;height:calc(100vh - 72px)}.admin-side .side-title{padding:8px 12px 22px;border-bottom:1px solid #ffffff18;margin-bottom:14px}.admin-side .side-title small{color:#afc1b7}.admin-side button{width:100%;text-align:left;background:transparent;color:#c9d5cf;padding:12px 13px;border-radius:9px;margin:2px 0;font-weight:700}.admin-side button:hover,.admin-side button.active{background:#ffffff14;color:#fff}.admin-main{padding:32px 4%;min-width:0}.admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.admin-top h1{margin:3px 0;font-size:34px}.admin-top p{color:#68736d;margin:0}.admin-actions{display:flex;gap:8px}.admin-card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}.admin-stat{background:#fff;border:1px solid #e0e5df;border-radius:13px;padding:18px}.admin-stat .icon{font-size:20px}.admin-stat small{display:block;color:#77817c;margin-top:9px}.admin-stat strong{display:block;font-size:30px;margin-top:3px}.admin-cols{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.admin-table{width:100%;border-collapse:collapse}.admin-table th,.admin-table td{text-align:left;padding:12px 10px;border-bottom:1px solid #edf0eb;font-size:13px}.admin-table th{color:#77817b;font-size:11px;text-transform:uppercase;letter-spacing:.7px}.status-pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}.status-green{background:#e8f3ea;color:#2f7545}.status-red{background:#f7e9e8;color:#984945}.status-gold{background:#f7f0e5;color:#8c6735}.admin-btn{padding:7px 10px;border-radius:7px;background:#eef2ed;color:#17352a;font-weight:800;font-size:12px}.admin-btn.danger{background:#f8e9e8;color:#963f3b}.admin-btn.dark{background:#17352a;color:#fff}.admin-form{background:#fff;border:1px solid #e0e5df;border-radius:14px;padding:20px;margin-bottom:20px}.admin-form h3{margin-top:0}.admin-list{max-height:510px;overflow:auto}.member-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #edf0eb}.member-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#e7eee9;color:#17352a;font-weight:900}.member-row .grow{flex:1}.member-row small{display:block;color:#78827c;margin-top:3px}.report-bars{display:grid;gap:14px}.report-bar label{display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-bottom:5px}.bar-track{height:9px;background:#e8ece7;border-radius:999px;overflow:hidden}.bar-fill{height:100%;background:#17352a;border-radius:999px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.quick{background:#f4f6f2;border:1px solid #e1e5df;border-radius:10px;padding:15px;text-align:left}.quick b{display:block}.quick span{font-size:12px;color:#748079}.admin-empty{padding:35px;text-align:center;color:#758079}.admin-mobile{display:none}@media(max-width:1050px){.admin-card-grid{grid-template-columns:repeat(2,1fr)}.admin-cols{grid-template-columns:1fr}}@media(max-width:760px){.admin-shell{grid-template-columns:1fr}.admin-side{position:static;height:auto;display:flex;overflow:auto;gap:5px;padding:10px}.admin-side .side-title{display:none}.admin-side button{width:auto;white-space:nowrap}.admin-main{padding:22px 4%}.admin-card-grid{grid-template-columns:1fr 1fr}.admin-top{align-items:flex-start;flex-direction:column;gap:12px}.admin-table{min-width:680px}.admin-table-wrap{overflow:auto}.admin-mobile{display:block}}@media(max-width:500px){.admin-card-grid{grid-template-columns:1fr 1fr}.admin-stat strong{font-size:24px}}
-
-/* v2 completion */
-.member-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.member-nav button{background:#fff;border:1px solid #dfe3dc;padding:9px 13px;border-radius:9px;font-weight:800;color:#53615a}.member-nav button.active{background:#17352a;color:#fff}.notice{padding:12px 14px;border-radius:10px;background:#f7f0e5;color:#775b30;margin-bottom:14px}.danger-note{background:#f8e9e8;color:#8e4541}.success-note{background:#e9f3ea;color:#2d7043}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.filter-row select{padding:10px;border:1px solid #dfe3dc;border-radius:9px;background:#fff}.fav-btn{background:#fff;border:1px solid #dfe3dc;border-radius:8px;padding:7px 10px;font-weight:800}.fav-btn.on{background:#f7f0e5;color:#8b6634}.book-cover-img{width:100%;height:220px;object-fit:cover}.small-note{font-size:12px;color:#758079}.admin-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}.audit-item{padding:11px 0;border-bottom:1px solid #edf0eb}.audit-item small{color:#7a847f;display:block;margin-top:3px}.recommend-reason{font-size:11px!important;color:#8c6a3c!important}.bar-fill{transition:width .25s}.settings-card{max-width:760px}.checkbox-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.check{padding:10px;background:#f5f6f1;border-radius:9px}.check input{margin-right:7px}@media(max-width:700px){.profile-grid,.checkbox-grid{grid-template-columns:1fr}.admin-shell{grid-template-columns:1fr}.admin-side{position:relative;top:0;height:auto}.admin-side button{width:auto;display:inline-block}.admin-card-grid{grid-template-columns:1fr 1fr}.admin-cols{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f7f7f3;color:#17231e}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.app{min-height:100vh}.nav{height:70px;background:#fff;border-bottom:1px solid #e5e8e2;display:flex;align-items:center;gap:22px;padding:0 5%;position:sticky;top:0;z-index:20}
+.brand{font-weight:900;font-size:23px;color:#17352a;cursor:pointer}.brand span{color:#c58a45}
+.navlinks{display:flex;gap:16px;flex:1}.navlinks button,.nav-action{background:none;color:#66716b;font-weight:700}.navlinks button:hover{color:#17352a}
+.nav-search{display:flex;align-items:center;background:#f1f3ee;border-radius:999px;padding:9px 13px;width:220px}.nav-search input{border:0;outline:0;background:none;width:100%}
+.primary,.ghost{padding:12px 17px;border-radius:9px;font-weight:800}.primary{background:#17352a;color:#fff}.ghost{background:#fff;color:#17352a;border:1px solid #d9ded8}
+.page,.section{padding:55px 5%;max-width:1400px;margin:auto}.hero{padding:70px 5%;display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:center;background:linear-gradient(135deg,#f8f7ef,#eef3ed)}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;color:#8b6a3d}.hero h1{font-size:clamp(42px,6vw,76px);line-height:.98;letter-spacing:-4px;margin:12px 0 20px}.hero p{font-size:18px;line-height:1.7;color:#65706a;max-width:650px}.actions{display:flex;gap:10px;margin-top:25px}
+.hero-card{background:#17352a;color:#fff;border-radius:20px;padding:26px}.hero-card h2{margin:8px 0}.signal{border-top:1px solid #ffffff22;padding-top:14px;color:#b9c9c0;font-size:13px;margin-top:25px}
+.section-head,.page-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:25px}.section h2,.page h1{font-size:36px;letter-spacing:-1.5px;margin:5px 0}
+.book-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.book-card{background:#fff;border:1px solid #e4e7e1;border-radius:14px;overflow:hidden;cursor:pointer}.cover{height:210px;display:grid;place-items:end start;padding:15px;color:#fff;font-weight:900;font-size:24px;background:linear-gradient(145deg,#6e927d,#17352a)}.book-info{padding:16px}.category{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#927044;font-weight:800}.book-info h3{margin:7px 0 4px}.book-info p{margin:0;color:#68736d}.card-bottom{display:flex;justify-content:space-between;margin-top:16px}.available{color:#2f7a48;font-weight:800;font-size:12px}.unavailable{color:#9a4c48;font-weight:800;font-size:12px}
+.auth-wrap{min-height:calc(100vh - 70px);display:grid;place-items:center;padding:40px}.auth{background:#fff;border:1px solid #e1e4de;border-radius:18px;padding:32px;width:min(450px,100%)}.auth h1{font-size:36px;margin:8px 0}.auth p{color:#69736e;line-height:1.6}.field{display:block;margin:15px 0;font-weight:700}.field input,.field select,.field textarea{width:100%;padding:12px;margin-top:7px;border:1px solid #dce0da;border-radius:9px;outline:0;background:#fff}.full{width:100%;margin-top:8px}.notice{padding:12px 14px;border-radius:9px;background:#f7f0e5;color:#775b30;margin-bottom:14px}.error{background:#f8e9e8;color:#8e4541}.success{background:#e9f3ea;color:#2d7043}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.metric,.panel{background:#fff;border:1px solid #e3e6df;border-radius:14px;padding:20px}.metric span{display:block;color:#758079;font-size:12px}.metric b{font-size:30px}.loan{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #edf0eb}.loan>div:nth-child(2){flex:1}.mini{width:42px;height:54px;border-radius:5px;background:#315b49;color:#fff;display:grid;place-items:center;font-weight:900}.loan span{display:block;color:#7a847f;font-size:12px;margin-top:3px}.loan button,.admin-btn{background:#eef2ed;color:#17352a;padding:7px 10px;border-radius:7px;font-weight:800}.admin-btn.danger{background:#f8e9e8;color:#963f3b}
+.dashboard-grid,.admin-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.searchbox{background:#fff;border:1px solid #dfe2dc;padding:12px 15px;border-radius:10px;width:320px}.searchbox input{border:0;outline:0;width:100%}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.chip{background:#fff;border:1px solid #dfe2dc;border-radius:999px;padding:8px 13px}.chip.active{background:#17352a;color:#fff}
+.details{display:grid;grid-template-columns:280px 1fr;gap:50px;max-width:950px;margin:20px auto 60px}.details .cover{height:380px}.details h1{font-size:50px;margin:8px 0}.meta{display:flex;gap:40px;margin:25px 0}.meta small{display:block;color:#8b948f}.tags{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0}.tag{background:#eef1eb;padding:7px 10px;border-radius:999px;font-size:12px}
+.table-wrap{overflow:auto}.admin-table{width:100%;border-collapse:collapse}.admin-table th,.admin-table td{text-align:left;padding:12px 9px;border-bottom:1px solid #edf0eb;font-size:13px}.admin-table th{font-size:11px;color:#77817b;text-transform:uppercase}.status-pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}.status-green{background:#e8f3ea;color:#2f7545}.status-red{background:#f7e9e8;color:#984945}
+.admin-shell{display:grid;grid-template-columns:225px 1fr;min-height:calc(100vh - 70px);background:#f3f5f1}.admin-side{background:#17352a;color:#fff;padding:22px 14px;position:sticky;top:70px;height:calc(100vh - 70px)}.admin-side button{width:100%;text-align:left;background:transparent;color:#c9d5cf;padding:11px 12px;border-radius:8px;font-weight:700}.admin-side button.active,.admin-side button:hover{background:#ffffff14;color:#fff}.admin-main{padding:30px 4%}.admin-card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:18px}.admin-stat{background:#fff;border:1px solid #e0e5df;border-radius:13px;padding:18px}.admin-stat small{display:block;color:#77817c}.admin-stat strong{display:block;font-size:30px;margin-top:5px}.admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.admin-top h1{margin:0}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.wide{grid-column:1/-1}.member-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.member-nav button{background:#fff;border:1px solid #dfe3dc;padding:9px 13px;border-radius:9px;font-weight:800}.member-nav button.active{background:#17352a;color:#fff}
+.toast{position:fixed;right:20px;bottom:20px;max-width:420px;background:#17352a;color:#fff;padding:13px 17px;border-radius:10px;z-index:100;box-shadow:0 12px 30px #0003}.footer{padding:30px;text-align:center;border-top:1px solid #e5e7e1;color:#7a837e}
+@media(max-width:950px){.hero,.details,.dashboard-grid,.admin-cols{grid-template-columns:1fr}.book-grid{grid-template-columns:repeat(2,1fr)}.metrics,.admin-card-grid{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}.nav-search{margin-left:auto;width:170px}.admin-shell{grid-template-columns:1fr}.admin-side{position:static;height:auto;display:flex;overflow:auto;gap:5px}.admin-side button{width:auto;white-space:nowrap}.admin-main{padding:22px 4%}}
+@media(max-width:560px){.book-grid{grid-template-columns:1fr}.metrics,.admin-card-grid,.profile-grid,.form-grid{grid-template-columns:1fr}.wide{grid-column:auto}.nav{padding:0 4%}.nav-search{width:140px}.hero h1{font-size:44px;letter-spacing:-2px}.details .cover{height:300px}.details h1{font-size:38px}}
 </style>
 </head>
 <body>
 <div id="app"></div>
+
 <script>
-const seedBooks=[
-{id:'b1',title:'Clean Code',author:'Robert C. Martin',category:'Computer Science',isbn:'9780132350884',description:'A practical guide to writing readable, maintainable software.',keywords:['programming','software','engineering'],availability:true},
-{id:'b2',title:'The Pragmatic Programmer',author:'Andrew Hunt & David Thomas',category:'Computer Science',isbn:'9780135957059',description:'Practical techniques and habits for professional software development.',keywords:['programming','software','career'],availability:true},
-{id:'b3',title:'Introduction to Algorithms',author:'Thomas H. Cormen et al.',category:'Computer Science',isbn:'9780262046305',description:'A comprehensive introduction to algorithms and problem solving.',keywords:['algorithms','data structures','computer science'],availability:true},
-{id:'b4',title:'Atomic Habits',author:'James Clear',category:'Personal Development',isbn:'9780735211292',description:'A framework for building good habits and breaking bad ones.',keywords:['habits','productivity','self development'],availability:true},
-{id:'b5',title:'Deep Work',author:'Cal Newport',category:'Personal Development',isbn:'9781455586691',description:'Rules for focused success in a distracted world.',keywords:['focus','productivity','work'],availability:true},
-{id:'b6',title:'Things Fall Apart',author:'Chinua Achebe',category:'Literature',isbn:'9780385474542',description:'A landmark novel exploring culture, identity, and colonial disruption.',keywords:['african literature','fiction','culture'],availability:true},
-{id:'b7',title:'Half of a Yellow Sun',author:'Chimamanda Ngozi Adichie',category:'Literature',isbn:'9780007200283',description:'A historical novel set around the Nigerian Civil War.',keywords:['nigeria','history','fiction'],availability:true},
-{id:'b8',title:'Database System Concepts',author:'Abraham Silberschatz et al.',category:'Computer Science',isbn:'9780078022159',description:'Core concepts for database design, transactions, and systems.',keywords:['database','sql','systems'],availability:true},
-{id:'b9',title:'Designing Data-Intensive Applications',author:'Martin Kleppmann',category:'Computer Science',isbn:'9781449373320',description:'Architecture and engineering principles for reliable data systems.',keywords:['data','distributed systems','architecture'],availability:true},
-{id:'b10',title:'The Psychology of Money',author:'Morgan Housel',category:'Business',isbn:'9780857197689',description:'Lessons about behaviour, risk, and decision-making with money.',keywords:['finance','psychology','business'],availability:true},
-{id:'b11',title:'The Psychology Book',author:'DK',category:'Psychology',isbn:'9780241401782',description:'An accessible introduction to major ideas and thinkers in psychology.',keywords:['psychology','behaviour','mind'],availability:true},
-{id:'b12',title:'The Alchemist',author:'Paulo Coelho',category:'Fiction',isbn:'9780062315007',description:'A philosophical novel about purpose, journey, and self-discovery.',keywords:['fiction','philosophy','journey'],availability:true}
-];
-const seedUsers=[{id:'u1',name:'Aisha Bello',email:'aisha@example.com',password:'member123',role:'member'},{id:'u2',name:'Musa Ibrahim',email:'musa@example.com',password:'member123',role:'member'},{id:'u3',name:'Royal Library Admin',email:'admin@library.local',password:'admin123',role:'admin'}];
-let state={books:load('libra_books',seedBooks),users:load('libra_users',seedUsers),borrowing:load('libra_borrowing',[]),user:load('libra_user',null),page:'home',query:'',category:'All',selected:null,toast:'',adminTab:'overview',editingBook:null};
-function load(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch(e){return f}} function save(){localStorage.setItem('libra_books',JSON.stringify(state.books));localStorage.setItem('libra_users',JSON.stringify(state.users));localStorage.setItem('libra_borrowing',JSON.stringify(state.borrowing));localStorage.setItem('libra_user',JSON.stringify(state.user))}
-function toast(m){state.toast=m;render();setTimeout(()=>{state.toast='';render()},2200)}
-function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function cls(c){return c==='Computer Science'?'':' '+({'Literature':'blue','Business':'gold','Psychology':'red','Fiction':'blue','Personal Development':'gold'}[c]||'')}
-function cover(b){return `<div class="cover${cls(b.category)}">${esc(b.title.split(' ').slice(0,2).map(x=>x[0]).join(''))}</div>`}
-function header(){return `<header class="nav"><div class="brand" onclick="go('home')">Royal Library<span>.</span></div><nav class="navlinks"><button class="${state.page==='home'?'active':''}" onclick="go('home')">Home</button><button class="${state.page==='catalog'?'active':''}" onclick="go('catalog')">Catalogue</button>${state.user?`<button onclick="go('${state.user.role==='admin'?'admin':'dashboard'}')">${state.user.role==='admin'?'Admin':'My Royal Library'}</button>`:''}</nav><div class="nav-search">⌕<input value="${esc(state.query)}" oninput="state.query=this.value;state.page='catalog';render()" placeholder="Search books"></div>${state.user?`<button class="nav-action" onclick="logout()">Logout</button><div class="avatar">${esc(state.user.name[0])}</div>`:`<button class="nav-action" onclick="go('login')">Sign in</button><button class="primary" style="padding:9px 13px" onclick="go('register')">Create account</button>`}</header>`}
-function card(b){return `<article class="book-card" onclick="details('${b.id}')">${cover(b)}<div class="book-info"><span class="category">${esc(b.category)}</span><h3>${esc(b.title)}</h3><p>${esc(b.author)}</p><div class="card-bottom"><span class="${b.availability?'available':'unavailable'}">${b.availability?'Available':'Borrowed'}</span><button>Details →</button></div></div></article>`}
-function home(){let rec=recommendations();return `<section class="hero"><div><span class="eyebrow">DIGITAL LIBRARY + PERSONALIZED DISCOVERY</span><h1>Find the next book worth your time.</h1><p>A web-based library management platform for cataloguing, circulation, member accounts, and personalized book discovery.</p><div class="actions"><button class="primary" onclick="go('catalog')">Explore catalogue →</button><button class="ghost" onclick="go('login')">Member access</button></div></div><div class="hero-card"><div class="hero-card-top"><span>PERSONALIZED FOR YOU</span><span>ROYAL LIBRARY ENGINE</span></div><div class="feature">${cover(seedBooks[0])}<div><span>Computer Science</span><h2>Clean Code</h2><p>Robert C. Martin</p></div></div><div class="signal"><span class="dot"></span>Recommendations use catalogue attributes and borrowing activity.</div></div></section><section class="section"><div class="section-head"><div><span class="eyebrow">DISCOVERY</span><h2>Recommended for you</h2></div><button class="text-btn" onclick="go('catalog')">Browse all →</button></div><div class="book-grid">${rec.slice(0,4).map(card).join('')}</div></section><section class="section split"><div><span class="eyebrow">SYSTEM ARCHITECTURE</span><h2>One library. Three layers.</h2><p>The project architecture connects a central data layer, the web application, and a recommendation layer. Borrowing and catalogue activity becomes useful discovery data.</p></div><div class="layers"><div class="layer"><span>01</span><b>Data Layer</b><small>Users, books, categories, borrowing and activity.</small></div><div class="layer"><span>02</span><b>Application Layer</b><small>Authentication, search, circulation, dashboards and reports.</small></div><div class="layer"><span>03</span><b>Recommendation Layer</b><small>Content-based + collaborative filtering principles.</small></div></div></section>`}
-function catalogue(){let cats=['All',...new Set(state.books.map(b=>b.category))];let books=state.books.filter(b=>(state.category==='All'||b.category===state.category)&&(`${b.title} ${b.author} ${b.category} ${b.keywords.join(' ')}`.toLowerCase().includes(state.query.toLowerCase())));return `<section class="page"><div class="page-heading"><div><span class="eyebrow">CATALOGUE</span><h1>Explore the collection</h1><p>Search by title, author, category, or keyword.</p></div><div class="searchbox">⌕ <input value="${esc(state.query)}" oninput="state.query=this.value;render()" placeholder="Search the catalogue..."></div></div><div class="chips">${cats.map(c=>`<button class="chip ${state.category===c?'active':''}" onclick="state.category='${esc(c)}';render()">${esc(c)}</button>`).join('')}</div><p>${books.length} book${books.length!==1?'s':''} found</p><div class="book-grid">${books.map(card).join('')}</div>${!books.length?'<div class="empty"><h3>No books match that search.</h3><p>Try another title, author, category, or keyword.</p></div>':''}</section>`}
-function details(id){state.selected=state.books.find(b=>b.id===id);state.page='details';render()}
-function detail(){let b=state.selected;if(!b)return catalogue();let related=state.books.filter(x=>x.id!==b.id&&x.category===b.category).slice(0,4);return `<section class="page"><button class="back" onclick="go('catalog')">← Back to catalogue</button><div class="details">${cover(b)}<div><span class="category">${esc(b.category)}</span><h1>${esc(b.title)}</h1><p class="author">by ${esc(b.author)}</p><p>${esc(b.description)}</p><div class="meta"><div><small>ISBN</small><b>${esc(b.isbn)}</b></div><div><small>Availability</small><b>${b.availability?'Available to borrow':'Currently borrowed'}</b></div></div><div class="tags">${b.keywords.map(k=>`<span class="tag">${esc(k)}</span>`).join('')}</div><button class="primary" ${b.availability?'':'disabled'} onclick="borrow('${b.id}')">${b.availability?'Borrow this book':'Currently unavailable'} →</button></div></div><div class="section-head"><div><span class="eyebrow">MORE LIKE THIS</span><h2>Related books</h2></div></div><div class="book-grid">${related.map(card).join('')}</div></section>`}
-function login(){return `<div class="auth-wrap"><div class="auth"><span class="eyebrow">ROYAL LIBRARY ACCESS</span><h1>Welcome back</h1><p>Sign in to borrow books, view your history, and receive personalized recommendations.</p><label class="field">Email<input id="email" type="email" placeholder="you@example.com"></label><label class="field">Password<input id="password" type="password" placeholder="Enter your password"></label><button class="primary full" onclick="loginAction()">Sign in →</button><p style="text-align:center;margin:18px 0 0">Don't have an account? <button class="text-btn" onclick="go('register')">Create one</button></p><div class="demo"><b>Demo accounts</b><br>Member: aisha@example.com / member123<br>Admin: admin@library.local / admin123</div></div></div>`}
-function loginAction(){let email=document.getElementById('email').value.trim().toLowerCase();let password=document.getElementById('password').value;if(!email||!password){toast('Enter your email and password.');return}let u=state.users.find(x=>x.email.toLowerCase()===email);if(!u){toast('No account found with that email. Create an account first.');return}if(!u.password){u.password='member123';}if(u.password!==password){toast('Incorrect password.');return}state.user=u;save();state.page=u.role==='admin'?'admin':'dashboard';toast('Signed in successfully.')}
-function register(){return `<div class="auth-wrap"><div class="auth"><span class="eyebrow">ROYAL LIBRARY MEMBERSHIP</span><h1>Create your account</h1><p>Register as a library member to borrow books, track your reading history, and receive personalized recommendations.</p><label class="field">Full name<input id="regName" type="text" placeholder="Your full name"></label><label class="field">Email address<input id="regEmail" type="email" placeholder="you@example.com"></label><label class="field">Password<input id="regPassword" type="password" placeholder="At least 6 characters"></label><label class="field">Confirm password<input id="regConfirm" type="password" placeholder="Repeat your password"></label><button class="primary full" onclick="registerAction()">Create account →</button><p style="text-align:center;margin:18px 0 0">Already have an account? <button class="text-btn" onclick="go('login')">Sign in</button></p></div></div>`}
-function registerAction(){let name=document.getElementById('regName').value.trim();let email=document.getElementById('regEmail').value.trim().toLowerCase();let password=document.getElementById('regPassword').value;let confirm=document.getElementById('regConfirm').value;if(name.length<2){toast('Enter your full name.');return}if(!/^\S+@\S+\.\S+$/.test(email)){toast('Enter a valid email address.');return}if(password.length<6){toast('Password must be at least 6 characters.');return}if(password!==confirm){toast('Passwords do not match.');return}if(state.users.some(x=>x.email.toLowerCase()===email)){toast('An account with this email already exists.');return}let u={id:'u'+Date.now(),name,email,password,role:'member',created_at:new Date().toISOString().slice(0,10)};state.users.push(u);state.user=u;save();state.page='dashboard';toast('Account created successfully.')}
-function logout(){state.user=null;save();state.page='home';render()}
-function borrow(id){if(!state.user){toast('Sign in to borrow a book.');go('login');return}let b=state.books.find(x=>x.id===id);if(!b||!b.availability){toast('This book is unavailable.');return}let now=new Date();let due=new Date(now.getTime()+14*86400000);state.borrowing.push({id:'br'+Date.now(),user_id:state.user.id,book_id:id,borrow_date:now.toISOString().slice(0,10),due_date:due.toISOString().slice(0,10),return_date:null,status:'borrowed'});b.availability=false;save();toast('Book borrowed. Due in 14 days.');render()}
-function ret(id){let br=state.borrowing.find(x=>x.id===id);if(!br)return;br.status='returned';br.return_date=new Date().toISOString().slice(0,10);let b=state.books.find(x=>x.id===br.book_id);if(b)b.availability=true;save();toast('Book returned.');render()}
-function recommendations(){let uid=state.user?.id||'u1';let mine=state.borrowing.filter(x=>x.user_id===uid);let cats=mine.map(x=>state.books.find(b=>b.id===x.book_id)?.category).filter(Boolean);let keys=mine.flatMap(x=>state.books.find(b=>b.id===x.book_id)?.keywords||[]);let seen=new Set(mine.map(x=>x.book_id));return state.books.filter(b=>!seen.has(b.id)).map(b=>({...b,score:(cats.includes(b.category)?4:0)+(b.keywords||[]).filter(k=>keys.includes(k)).length*2})).sort((a,b)=>b.score-a.score)}
-function dashboard(){let bs=state.borrowing.filter(x=>x.user_id===state.user.id);let rec=recommendations();return `<section class="page"><div class="dash-head"><div><span class="eyebrow">MY ROYAL LIBRARYRY</span><h1>Good to see you, ${esc(state.user.name.split(' ')[0])}.</h1><p>Your borrowing activity and personalized discovery in one view.</p></div></div><div class="metrics"><div class="metric"><span>Current loans</span><b>${bs.filter(x=>x.status==='borrowed').length}</b></div><div class="metric"><span>Returned</span><b>${bs.filter(x=>x.status==='returned').length}</b></div><div class="metric"><span>Recommendations</span><b>${rec.length}</b></div><div class="metric"><span>Role</span><b>Member</b></div></div><div class="dashboard-grid"><div class="panel"><div class="panel-head"><h3>Current & recent borrowing</h3></div>${bs.length?bs.map(x=>{let b=state.books.find(y=>y.id===x.book_id);return `<div class="loan"><div class="mini">${esc(b?.title.slice(0,2).toUpperCase())}</div><div><b>${esc(b?.title||'Unknown')}</b><span>${x.status==='borrowed'?'Due '+x.due_date:'Returned '+x.return_date}</span></div>${x.status==='borrowed'?`<button onclick="ret('${x.id}')">Return</button>`:''}</div>`}).join(''):'<div class="empty"><p>No borrowing history yet.</p></div>'}</div><div class="panel"><div class="panel-head"><h3>Personalized recommendations</h3><span>Hybrid</span></div>${rec.slice(0,6).map(b=>`<div class="rec" onclick="details('${b.id}')"><div class="mini">${esc(b.title.slice(0,2).toUpperCase())}</div><div><b>${esc(b.title)}</b><span>${esc(b.author)}</span></div><strong>${b.score}</strong></div>`).join('')}</div></div></section>`}
-function adminNav(){return `<aside class="admin-side"><div class="side-title"><b>ROYAL LIBRARY ADMIN</b><small>Royal Library management</small></div>${[['overview','▦','Overview'],['books','▤','Books'],['members','♙','Members'],['loans','↔','Borrowing'],['reports','◒','Reports']].map(([k,i,l])=>`<button class="${state.adminTab===k?'active':''}" onclick="adminTab('${k}')">${i} &nbsp; ${l}</button>`).join('')}<button onclick="go('catalog')">← View catalogue</button></aside>`}
-function adminTab(t){state.adminTab=t;state.editingBook=null;render();scrollTo(0,0)}
-function adminShell(content){return `<div class="admin-shell">${adminNav()}<main class="admin-main">${content}</main></div>`}
-function adminHeader(title,sub,action=''){return `<div class="admin-top"><div><span class="eyebrow">ADMINISTRATION</span><h1>${title}</h1><p>${sub}</p></div>${action?`<div class="admin-actions">${action}</div>`:''}</div>`}
-function adminOverview(){let active=state.borrowing.filter(x=>x.status==='borrowed');let overdue=active.filter(x=>new Date(x.due_date)<new Date());let popular=state.books.map(b=>({...b,count:state.borrowing.filter(x=>x.book_id===b.id).length})).sort((a,b)=>b.count-a.count).slice(0,5);return adminShell(`${adminHeader('Royal Library control centre','Monitor the collection, members, circulation and system activity.')}
-<div class="admin-card-grid"><div class="admin-stat"><div class="icon">▤</div><small>Total books</small><strong>${state.books.length}</strong></div><div class="admin-stat"><div class="icon">♙</div><small>Members</small><strong>${state.users.filter(x=>x.role==='member').length}</strong></div><div class="admin-stat"><div class="icon">↔</div><small>Active loans</small><strong>${active.length}</strong></div><div class="admin-stat"><div class="icon">!</div><small>Overdue</small><strong>${overdue.length}</strong></div></div>
-<div class="admin-cols"><div class="panel"><div class="panel-head"><h3>Recent borrowing</h3><button class="admin-btn" onclick="adminTab('loans')">View all</button></div>${active.slice().reverse().slice(0,7).map(x=>{let b=state.books.find(y=>y.id===x.book_id),u=state.users.find(y=>y.id===x.user_id);let od=new Date(x.due_date)<new Date();return `<div class="loan"><div class="mini">${esc((b?.title||'?').slice(0,2).toUpperCase())}</div><div><b>${esc(b?.title||'Unknown')}</b><span>${esc(u?.name||'Unknown member')} · Due ${x.due_date}</span></div><span class="status-pill ${od?'status-red':'status-green'}">${od?'Overdue':'Active'}</span></div>`}).join('')||'<div class="admin-empty">No active borrowing records.</div>'}</div><div class="panel"><div class="panel-head"><h3>Most borrowed</h3></div><div class="report-bars">${popular.map(b=>{let max=Math.max(1,popular[0]?.count||1);return `<div class="report-bar"><label><span>${esc(b.title)}</span><span>${b.count}</span></label><div class="bar-track"><div class="bar-fill" style="width:${Math.max(5,b.count/max*100)}%"></div></div></div>`}).join('')}</div></div></div>
-<div class="panel" style="margin-top:18px"><div class="panel-head"><h3>Quick actions</h3></div><div class="quick-grid"><button class="quick" onclick="adminTab('books')"><b>Manage books</b><span>Add, edit or remove catalogue records.</span></button><button class="quick" onclick="adminTab('members')"><b>Manage members</b><span>Review registered library users.</span></button><button class="quick" onclick="adminTab('reports')"><b>View reports</b><span>Borrowing and catalogue statistics.</span></button></div></div>`)}
-function bookForm(){let b=state.editingBook;return `<div class="admin-form"><div class="panel-head"><h3>${b?'Edit book':'Add new book'}</h3>${b?`<button class="admin-btn" onclick="state.editingBook=null;render()">Cancel</button>`:''}</div><div class="form-grid"><label class="field">Title<input id="bt" value="${esc(b?.title||'')}"></label><label class="field">Author<input id="ba" value="${esc(b?.author||'')}"></label><label class="field">Category<select id="bc">${['Computer Science','Literature','Personal Development','Business','Psychology','Fiction'].map(c=>`<option ${b?.category===c?'selected':''}>${c}</option>`).join('')}</select></label><label class="field">ISBN<input id="bi" value="${esc(b?.isbn||'')}"></label><label class="field wide">Description<textarea id="bd">${esc(b?.description||'')}</textarea></label><label class="field wide">Keywords<input id="bk" value="${esc((b?.keywords||[]).join(', '))}" placeholder="programming, software, systems"></label></div><button class="primary" onclick="saveBook()">${b?'Save changes':'Add book'} →</button></div>`}
-function adminBooks(){return adminShell(`${adminHeader('Books','Manage catalogue records, availability and book information.',`<button class="primary" onclick="state.editingBook=null;document.getElementById('book-form-anchor')?.scrollIntoView();render()">+ Add book</button>`)}<div id="book-form-anchor"></div>${bookForm()}<div class="panel"><div class="panel-head"><h3>Catalogue inventory</h3><span>${state.books.length} records</span></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Book</th><th>Category</th><th>ISBN</th><th>Status</th><th>Actions</th></tr></thead><tbody>${state.books.map(b=>`<tr><td><b>${esc(b.title)}</b><br><span>${esc(b.author)}</span></td><td>${esc(b.category)}</td><td>${esc(b.isbn||'—')}</td><td><span class="status-pill ${b.availability?'status-green':'status-red'}">${b.availability?'Available':'Borrowed'}</span></td><td><button class="admin-btn" onclick="editBook('${b.id}')">Edit</button> <button class="admin-btn danger" onclick="deleteBook('${b.id}')">Delete</button></td></tr>`).join('')}</tbody></table></div></div>`)}
-function editBook(id){state.editingBook=state.books.find(b=>b.id===id)||null;state.adminTab='books';render()}
-function saveBook(){let title=document.getElementById('bt').value.trim(),author=document.getElementById('ba').value.trim();if(!title||!author){toast('Title and author are required.');return}let data={title,author,category:document.getElementById('bc').value,isbn:document.getElementById('bi').value.trim(),description:document.getElementById('bd').value.trim(),keywords:document.getElementById('bk').value.split(',').map(x=>x.trim()).filter(Boolean)};if(state.editingBook){Object.assign(state.editingBook,data);toast('Book updated.')}else{state.books.unshift({id:'b'+Date.now(),...data,availability:true});toast('Book added.')}state.editingBook=null;save();render()}
-function deleteBook(id){let b=state.books.find(x=>x.id===id);if(!b)return;if(state.borrowing.some(x=>x.book_id===id&&x.status==='borrowed')){toast('Return the book before deleting it.');return}if(!confirm(`Delete "${b.title}" from the catalogue?`))return;state.books=state.books.filter(x=>x.id!==id);save();toast('Book deleted.');render()}
-function adminMembers(){let members=state.users.filter(x=>x.role==='member');return adminShell(`${adminHeader('Members','Review registered library members and their borrowing activity.') }<div class="panel"><div class="panel-head"><h3>Registered members</h3><span>${members.length} members</span></div><div class="admin-list">${members.map(u=>{let loans=state.borrowing.filter(x=>x.user_id===u.id),active=loans.filter(x=>x.status==='borrowed').length;return `<div class="member-row"><div class="member-avatar">${esc(u.name[0]||'?')}</div><div class="grow"><b>${esc(u.name)}</b><small>${esc(u.email)}</small></div><span>${active} active loan${active!==1?'s':''}</span><button class="admin-btn danger" onclick="removeMember('${u.id}')">Remove</button></div>`}).join('')||'<div class="admin-empty">No registered members.</div>'}</div></div>`)}
-function removeMember(id){let u=state.users.find(x=>x.id===id);if(!u)return;if(state.borrowing.some(x=>x.user_id===id&&x.status==='borrowed')){toast('This member has an active loan.');return}if(!confirm(`Remove ${u.name} from the member list?`))return;state.users=state.users.filter(x=>x.id!==id);save();toast('Member removed.');render()}
-function adminLoans(){let rows=state.borrowing.slice().reverse();return adminShell(`${adminHeader('Borrowing & returns','Monitor circulation, due dates and overdue books.') }<div class="metrics"><div class="metric"><span>Total transactions</span><b>${state.borrowing.length}</b></div><div class="metric"><span>Active</span><b>${state.borrowing.filter(x=>x.status==='borrowed').length}</b></div><div class="metric"><span>Returned</span><b>${state.borrowing.filter(x=>x.status==='returned').length}</b></div><div class="metric"><span>Overdue</span><b>${state.borrowing.filter(x=>x.status==='borrowed'&&new Date(x.due_date)<new Date()).length}</b></div></div><div class="panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Member</th><th>Book</th><th>Borrowed</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows.map(x=>{let u=state.users.find(y=>y.id===x.user_id),b=state.books.find(y=>y.id===x.book_id),over=x.status==='borrowed'&&new Date(x.due_date)<new Date();return `<tr><td>${esc(u?.name||'Unknown')}</td><td>${esc(b?.title||'Unknown')}</td><td>${x.borrow_date}</td><td>${x.due_date}</td><td><span class="status-pill ${x.status==='returned'?'status-green':over?'status-red':'status-gold'}">${x.status==='returned'?'Returned':over?'Overdue':'Borrowed'}</span></td><td>${x.status==='borrowed'?`<button class="admin-btn" onclick="adminReturn('${x.id}')">Mark returned</button>`:'—'}</td></tr>`}).join('')}</tbody></table></div></div>`)}
-function adminReturn(id){ret(id);state.adminTab='loans';render()}
-function adminReports(){let total=state.borrowing.length,returned=state.borrowing.filter(x=>x.status==='returned').length,active=total-returned;let cats=[...new Set(state.books.map(b=>b.category))].map(c=>({c,n:state.books.filter(b=>b.category===c).length})).sort((a,b)=>b.n-a.n);return adminShell(`${adminHeader('Reports & analytics','Basic reports for collection and circulation management.') }<div class="admin-card-grid"><div class="admin-stat"><small>Catalogue size</small><strong>${state.books.length}</strong></div><div class="admin-stat"><small>Transactions</small><strong>${total}</strong></div><div class="admin-stat"><small>Return rate</small><strong>${total?Math.round(returned/total*100):0}%</strong></div><div class="admin-stat"><small>Availability</small><strong>${state.books.length?Math.round(state.books.filter(b=>b.availability).length/state.books.length*100):0}%</strong></div></div><div class="admin-cols"><div class="panel"><div class="panel-head"><h3>Books by category</h3></div><div class="report-bars">${cats.map(x=>{let max=Math.max(1,cats[0]?.n||1);return `<div class="report-bar"><label><span>${esc(x.c)}</span><span>${x.n}</span></label><div class="bar-track"><div class="bar-fill" style="width:${x.n/max*100}%"></div></div></div>`}).join('')}</div></div><div class="panel"><div class="panel-head"><h3>Circulation summary</h3></div><div class="loan"><div class="mini">A</div><div><b>Active loans</b><span>Books currently out</span></div><strong>${active}</strong></div><div class="loan"><div class="mini">R</div><div><b>Returned</b><span>Completed transactions</span></div><strong>${returned}</strong></div><div class="loan"><div class="mini">O</div><div><b>Overdue</b><span>Past due date</span></div><strong>${state.borrowing.filter(x=>x.status==='borrowed'&&new Date(x.due_date)<new Date()).length}</strong></div></div></div>`)}
-function admin(){if(state.adminTab==='books')return adminBooks();if(state.adminTab==='members')return adminMembers();if(state.adminTab==='loans')return adminLoans();if(state.adminTab==='reports')return adminReports();return adminOverview()}
+const API_BASE = window.ROYAL_LIBRARY_API || window.location.origin + '/api';
+let currentUser = null;
+let authToken = localStorage.getItem('royal_library_token') || '';
 
-function addBook(){let title=document.getElementById('bt').value.trim(),author=document.getElementById('ba').value.trim();if(!title||!author){toast('Title and author are required.');return}state.books.unshift({id:'b'+Date.now(),title,author,category:document.getElementById('bc').value,isbn:document.getElementById('bi').value.trim(),description:document.getElementById('bd').value.trim(),keywords:document.getElementById('bk').value.split(',').map(x=>x.trim()).filter(Boolean),availability:true});save();toast('Book added.');render()}
-function go(p){state.page=p;render();scrollTo(0,0)}
-function render(){let body=state.page==='home'?home():state.page==='catalog'?catalogue():state.page==='details'?detail():state.page==='login'?login():state.page==='register'?register():state.page==='dashboard'&&state.user?dashboard():state.page==='admin'&&state.user?.role==='admin'?admin():home();document.getElementById('app').innerHTML=header()+body+`<footer class="footer">Digital Royal Library Management & Personalized Book Recommendation System</footer>${state.toast?`<div class="toast">${esc(state.toast)}</div>`:''}`}
-
-/* ===== Completed prototype layer ===== */
-function normalizeState(){
-  state.books.forEach(b=>{b.total_copies=Number(b.total_copies||3);b.available_copies=Number.isFinite(Number(b.available_copies))?Number(b.available_copies):(b.availability?b.total_copies:0);b.keywords=Array.isArray(b.keywords)?b.keywords:[];});
-  state.users.forEach(u=>{u.favorite_ids=Array.isArray(u.favorite_ids)?u.favorite_ids:[];u.preferences=Array.isArray(u.preferences)?u.preferences:[];u.active=u.active!==false;u.created_at=u.created_at||new Date().toISOString().slice(0,10)});
-  state.activities=load('libra_activities',[]);state.audit=load('libra_audit',[]);state.memberTab=state.memberTab||'overview';state.catalogPage=state.catalogPage||1;state.sort=state.sort||'title';state.availabilityFilter=state.availabilityFilter||'all';
+async function api(path, options={}) {
+  const headers = {'Content-Type':'application/json', ...(options.headers||{})};
+  if (authToken) headers.Authorization = `Bearer ${authToken}`;
+  const res = await fetch(API_BASE + path, {...options, headers});
+  let body = {};
+  try { body = await res.json(); } catch (_) {}
+  if (!res.ok) throw new Error(body.error || body.message || `Request failed (${res.status})`);
+  return body;
 }
-normalizeState();
-function save(){localStorage.setItem('libra_books',JSON.stringify(state.books));localStorage.setItem('libra_users',JSON.stringify(state.users));localStorage.setItem('libra_borrowing',JSON.stringify(state.borrowing));localStorage.setItem('libra_user',JSON.stringify(state.user));localStorage.setItem('libra_activities',JSON.stringify(state.activities||[]));localStorage.setItem('libra_audit',JSON.stringify(state.audit||[]))}
-function currentUser(){return state.users.find(u=>u.id===state.user?.id)||state.user}
-function logActivity(type,bookId){state.activities.push({id:'a'+Date.now()+Math.random(),user_id:state.user?.id||null,book_id:bookId,type,date:new Date().toISOString()});save()}
-function audit(action,details){state.audit.unshift({id:'ad'+Date.now()+Math.random(),action,details,date:new Date().toISOString(),admin_id:state.user?.id||null});state.audit=state.audit.slice(0,100);save()}
-function overdue(x){return x.status==='borrowed'&&new Date(x.due_date+'T23:59:59')<new Date()}
-function dueSoon(x){let d=(new Date(x.due_date+'T23:59:59')-new Date())/86400000;return x.status==='borrowed'&&d>=0&&d<=3}
-function statusLabel(x){return x.status==='returned'?'Returned':overdue(x)?'Overdue':dueSoon(x)?'Due soon':'Borrowed'}
-function statusClass(x){return x.status==='returned'?'status-green':overdue(x)?'status-red':dueSoon(x)?'status-gold':'status-green'}
-function isFav(id){return !!state.user?.favorite_ids?.includes(id)}
-function toggleFavorite(id){if(!state.user){toast('Sign in to save favourites.');go('login');return}let u=currentUser();u.favorite_ids=u.favorite_ids||[];u.favorite_ids=u.favorite_ids.includes(id)?u.favorite_ids.filter(x=>x!==id):[...u.favorite_ids,id];state.user=u;save();render()}
-function addActivity(type,id){if(state.user)logActivity(type,id)}
-function recommendations(){
- let u=currentUser();let uid=u?.id;let mine=state.borrowing.filter(x=>x.user_id===uid);let prefs=u?.preferences||[];let seen=new Set(mine.map(x=>x.book_id));let cats=mine.map(x=>state.books.find(b=>b.id===x.book_id)?.category).filter(Boolean);let keys=mine.flatMap(x=>state.books.find(b=>b.id===x.book_id)?.keywords||[]);let peerCounts={};mine.forEach(m=>{state.borrowing.filter(x=>x.book_id===m.book_id&&x.user_id!==uid).forEach(peer=>{state.borrowing.filter(x=>x.user_id===peer.user_id&&x.status==='returned').forEach(px=>{peerCounts[px.book_id]=(peerCounts[px.book_id]||0)+1})})});
- return state.books.filter(b=>!seen.has(b.id)&&b.available_copies>0).map(b=>{let content=(cats.includes(b.category)?4:0)+(prefs.includes(b.category)?5:0)+(b.keywords||[]).filter(k=>keys.includes(k)).length*2;let coll=(peerCounts[b.id]||0)*2;let score=content+coll;let reason=prefs.includes(b.category)?'Matches your selected interests':cats.includes(b.category)?'Similar to books you borrowed':coll?'Borrowed by readers with similar activity':'Popular catalogue match';return {...b,score,reason}}).sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title))}
-function card(b){return `<article class="book-card" onclick="details('${b.id}')">${cover(b)}<div class="book-info"><span class="category">${esc(b.category)}</span><h3>${esc(b.title)}</h3><p>${esc(b.author)}</p><div class="card-bottom"><span class="${b.available_copies>0?'available':'unavailable'}">${b.available_copies>0?`${b.available_copies}/${b.total_copies} available`:'Unavailable'}</span><button onclick="event.stopPropagation();toggleFavorite('${b.id}')" class="fav-btn ${isFav(b.id)?'on':''}">${isFav(b.id)?'♥':'♡'}</button></div></div></article>`}
-function header(){return `<header class="nav"><div class="brand" onclick="go('home')">Royal Library<span>.</span></div><nav class="navlinks"><button class="${state.page==='home'?'active':''}" onclick="go('home')">Home</button><button class="${state.page==='catalog'?'active':''}" onclick="go('catalog')">Catalogue</button>${state.user?`<button onclick="go('${state.user.role==='admin'?'admin':'dashboard'}')">${state.user.role==='admin'?'Admin':'My Royal Library'}</button>`:''}</nav><div class="nav-search">⌕<input value="${esc(state.query)}" oninput="state.query=this.value;state.page='catalog';state.catalogPage=1;render()" placeholder="Search books"></div>${state.user?`<button class="nav-action" onclick="logout()">Logout</button><div class="avatar" title="${esc(state.user.name)}">${esc(state.user.name[0])}</div>`:`<button class="nav-action" onclick="go('login')">Sign in</button><button class="primary" style="padding:9px 13px" onclick="go('register')">Create account</button>`}</header>`}
-function catalogue(){let cats=['All',...new Set(state.books.map(b=>b.category))];let books=state.books.filter(b=>(state.category==='All'||b.category===state.category)&&(state.availabilityFilter==='all'||(state.availabilityFilter==='available'?b.available_copies>0:b.available_copies===0))&&(`${b.title} ${b.author} ${b.category} ${b.isbn||''} ${b.keywords.join(' ')}`.toLowerCase().includes(state.query.toLowerCase())));books.sort((a,b)=>state.sort==='author'?a.author.localeCompare(b.author):state.sort==='newest'?b.id.localeCompare(a.id):a.title.localeCompare(b.title));let per=8,total=Math.ceil(books.length/per)||1;if(state.catalogPage>total)state.catalogPage=total;let pageBooks=books.slice((state.catalogPage-1)*per,state.catalogPage*per);return `<section class="page"><div class="page-heading"><div><span class="eyebrow">CATALOGUE</span><h1>Explore the collection</h1><p>Search by title, author, ISBN, category, or keyword.</p></div><div class="searchbox">⌕ <input value="${esc(state.query)}" oninput="state.query=this.value;state.catalogPage=1;render()" placeholder="Search the catalogue..."></div></div><div class="chips">${cats.map(c=>`<button class="chip ${state.category===c?'active':''}" onclick="state.category='${esc(c)}';state.catalogPage=1;render()">${esc(c)}</button>`).join('')}</div><div class="filter-row"><select onchange="state.sort=this.value;state.catalogPage=1;render()"><option value="title" ${state.sort==='title'?'selected':''}>Sort: Title</option><option value="author" ${state.sort==='author'?'selected':''}>Sort: Author</option><option value="newest" ${state.sort==='newest'?'selected':''}>Sort: Newest</option></select><select onchange="state.availabilityFilter=this.value;state.catalogPage=1;render()"><option value="all" ${state.availabilityFilter==='all'?'selected':''}>All availability</option><option value="available" ${state.availabilityFilter==='available'?'selected':''}>Available now</option><option value="unavailable" ${state.availabilityFilter==='unavailable'?'selected':''}>Unavailable</option></select><span class="small-note">${books.length} result${books.length!==1?'s':''}</span></div><div class="book-grid">${pageBooks.map(card).join('')}</div>${!books.length?'<div class="empty"><h3>No books match that search.</h3><p>Try another title, author, category, or keyword.</p></div>':`<div class="actions" style="justify-content:center"><button class="ghost" onclick="state.catalogPage=Math.max(1,state.catalogPage-1);render()" ${state.catalogPage===1?'disabled':''}>← Previous</button><span style="padding:13px">Page ${state.catalogPage} of ${total}</span><button class="ghost" onclick="state.catalogPage=Math.min(${total},state.catalogPage+1);render()" ${state.catalogPage===total?'disabled':''}>Next →</button></div>`}</section>`}
-function details(id){state.selected=state.books.find(b=>b.id===id);if(state.selected)addActivity('view',id);state.page='details';render()}
-function detail(){let b=state.selected;if(!b)return catalogue();let related=recommendations().filter(x=>x.id!==b.id&&x.category===b.category).slice(0,4);return `<section class="page"><button class="back" onclick="go('catalog')">← Back to catalogue</button><div class="details">${cover(b)}<div><span class="category">${esc(b.category)}</span><h1>${esc(b.title)}</h1><p class="author">by ${esc(b.author)}</p><p>${esc(b.description)}</p><div class="meta"><div><small>ISBN</small><b>${esc(b.isbn||'—')}</b></div><div><small>Availability</small><b>${b.available_copies}/${b.total_copies} copies</b></div></div><div class="tags">${b.keywords.map(k=>`<span class="tag">${esc(k)}</span>`).join('')}</div><div class="actions"><button class="primary" ${b.available_copies>0?'':'disabled'} onclick="borrow('${b.id}')">${b.available_copies>0?'Borrow this book':'Currently unavailable'} →</button><button class="fav-btn ${isFav(b.id)?'on':''}" onclick="toggleFavorite('${b.id}')">${isFav(b.id)?'♥ Saved':'♡ Save to favourites'}</button></div></div></div><div class="section-head"><div><span class="eyebrow">DISCOVERY</span><h2>Related books</h2></div></div><div class="book-grid">${related.map(card).join('')}</div></section>`}
-function registerAction(){let name=document.getElementById('regName').value.trim(),email=document.getElementById('regEmail').value.trim().toLowerCase(),password=document.getElementById('regPassword').value,confirm=document.getElementById('regConfirm').value;if(name.length<2){toast('Enter your full name.');return}if(!/^\S+@\S+\.\S+$/.test(email)){toast('Enter a valid email address.');return}if(password.length<6){toast('Password must be at least 6 characters.');return}if(password!==confirm){toast('Passwords do not match.');return}if(state.users.some(x=>x.email.toLowerCase()===email)){toast('An account with this email already exists.');return}let u={id:'u'+Date.now(),name,email,password,role:'member',favorite_ids:[],preferences:[],active:true,created_at:new Date().toISOString().slice(0,10)};state.users.push(u);state.user=u;save();state.page='dashboard';state.memberTab='profile';toast('Account created. Choose your interests to improve recommendations.');render()}
-function loginAction(){let email=document.getElementById('email').value.trim().toLowerCase(),password=document.getElementById('password').value;if(!email||!password){toast('Enter your email and password.');return}let u=state.users.find(x=>x.email.toLowerCase()===email);if(!u){toast('No account found with that email.');return}if(u.active===false){toast('This account is inactive. Contact the library administrator.');return}if(u.password!==password){toast('Incorrect password.');return}state.user=u;save();state.page=u.role==='admin'?'admin':'dashboard';toast('Signed in successfully.');render()}
-function borrow(id){if(!state.user){toast('Sign in to borrow a book.');go('login');return}if(state.user.role!=='member'){toast('Use a member account to borrow books.');return}let b=state.books.find(x=>x.id===id);let active=state.borrowing.filter(x=>x.user_id===state.user.id&&x.status==='borrowed');if(active.length>=3){toast('Borrowing limit reached: 3 active books.');return}if(active.some(x=>x.book_id===id)){toast('You already have this book.');return}if(!b||b.available_copies<1){toast('This book is unavailable.');return}let now=new Date(),due=new Date(now.getTime()+14*86400000);state.borrowing.push({id:'br'+Date.now(),user_id:state.user.id,book_id:id,borrow_date:now.toISOString().slice(0,10),due_date:due.toISOString().slice(0,10),return_date:null,status:'borrowed'});b.available_copies--;b.availability=b.available_copies>0;addActivity('borrow',id);save();toast('Book borrowed. Due in 14 days.');render()}
-function ret(id){let br=state.borrowing.find(x=>x.id===id);if(!br||br.status!=='borrowed')return;br.status='returned';br.return_date=new Date().toISOString().slice(0,10);let b=state.books.find(x=>x.id===br.book_id);if(b){b.available_copies=Math.min(b.total_copies,b.available_copies+1);b.availability=b.available_copies>0}addActivity('return',br.book_id);save();toast('Book returned.');render()}
-function memberNav(){return `<div class="member-nav">${[['overview','Overview'],['borrowed','My books'],['history','History'],['recommendations','Recommendations'],['favourites','Favourites'],['profile','Profile']].map(([k,l])=>`<button class="${state.memberTab===k?'active':''}" onclick="state.memberTab='${k}';render()">${l}</button>`).join('')}</div>`}
-function memberNotifications(){let bs=state.borrowing.filter(x=>x.user_id===state.user.id&&x.status==='borrowed'),o=bs.filter(overdue),d=bs.filter(dueSoon);if(o.length)return `<div class="notice danger-note">You have ${o.length} overdue book${o.length>1?'s':''}. Please return ${o.length>1?'them':'it'} as soon as possible.</div>`;if(d.length)return `<div class="notice">${d.length} book${d.length>1?'s are':' is'} due within 3 days.</div>`;return ''}
-function dashboard(){let u=currentUser();state.user=u;let bs=state.borrowing.filter(x=>x.user_id===u.id),active=bs.filter(x=>x.status==='borrowed'),rec=recommendations(),favs=state.books.filter(b=>(u.favorite_ids||[]).includes(b.id));let body='';if(state.memberTab==='overview')body=`${memberNotifications()}<div class="metrics"><div class="metric"><span>Current loans</span><b>${active.length}/3</b></div><div class="metric"><span>Returned</span><b>${bs.filter(x=>x.status==='returned').length}</b></div><div class="metric"><span>Recommendations</span><b>${rec.length}</b></div><div class="metric"><span>Favourites</span><b>${favs.length}</b></div></div><div class="dashboard-grid"><div class="panel"><div class="panel-head"><h3>Current loans</h3><span>${active.length}</span></div>${active.length?active.map(loanRow).join(''):'<div class="empty"><p>No active loans.</p><button class="primary" onclick="go(\'catalog\')">Browse catalogue</button></div>'}</div><div class="panel"><div class="panel-head"><h3>Recommended for you</h3><span>Hybrid</span></div>${rec.slice(0,5).map(recRow).join('')||'<div class="empty"><p>Select interests in your profile or borrow books to improve recommendations.</p></div>'}</div></div>`;else if(state.memberTab==='borrowed')body=`${memberNotifications()}<div class="panel"><div class="panel-head"><h3>My active books</h3><span>${active.length}/3</span></div>${active.map(loanRow).join('')||'<div class="empty"><p>You have no active borrowed books.</p></div>'}</div>`;else if(state.memberTab==='history')body=`<div class="panel"><div class="panel-head"><h3>Borrowing history</h3><span>${bs.length} transactions</span></div>${bs.slice().reverse().map(loanRow).join('')||'<div class="empty"><p>No borrowing history yet.</p></div>'}</div>`;else if(state.memberTab==='recommendations')body=`<div class="panel"><div class="panel-head"><div><h3>Personalized recommendations</h3><span class="small-note">Based on preferences, borrowing activity and similar users.</span></div></div>${rec.map(recRow).join('')||'<div class="empty"><p>Borrow a few books or select interests to generate recommendations.</p></div>'}</div>`;else if(state.memberTab==='favourites')body=`<div class="panel"><div class="panel-head"><h3>Saved favourites</h3><span>${favs.length}</span></div><div class="book-grid">${favs.map(card).join('')}</div>${!favs.length?'<div class="empty"><p>You have not saved any books yet.</p></div>':''}</div>`;else body=profilePage();return `<section class="page"><div class="dash-head"><div><span class="eyebrow">MY ROYAL LIBRARYRY</span><h1>${esc(u.name)}</h1><p>Manage your library account, borrowing activity and recommendations.</p></div></div>${memberNav()}${body}</section>`}
-function loanRow(x){let b=state.books.find(y=>y.id===x.book_id);return `<div class="loan"><div class="mini">${esc((b?.title||'?').slice(0,2).toUpperCase())}</div><div><b>${esc(b?.title||'Unknown')}</b><span>Borrowed ${x.borrow_date} · ${statusLabel(x)} · Due ${x.due_date}</span></div>${x.status==='borrowed'?`<button onclick="ret('${x.id}')">Return</button>`:''}</div>`}
-function recRow(b){return `<div class="rec" onclick="details('${b.id}')"><div class="mini">${esc(b.title.slice(0,2).toUpperCase())}</div><div><b>${esc(b.title)}</b><span>${esc(b.author)}</span><span class="recommend-reason">${esc(b.reason)}</span></div><strong>${b.score}</strong></div>`}
-function profilePage(){let u=currentUser(),cats=['Computer Science','Literature','Personal Development','Business','Psychology','Fiction'];return `<div class="profile-grid"><div class="panel"><div class="panel-head"><h3>Profile</h3></div><label class="field">Full name<input id="pn" value="${esc(u.name)}"></label><label class="field">Email<input id="pe" type="email" value="${esc(u.email)}"></label><button class="primary" onclick="saveProfile()">Save profile</button></div><div class="panel settings-card"><div class="panel-head"><h3>Reading interests</h3></div><p class="small-note">These preferences are used for initial recommendations when you have little borrowing history.</p><div class="checkbox-grid">${cats.map(c=>`<label class="check"><input type="checkbox" value="${esc(c)}" ${u.preferences.includes(c)?'checked':''}>${esc(c)}</label>`).join('')}</div><button class="primary" style="margin-top:15px" onclick="savePreferences()">Save interests</button></div><div class="panel settings-card"><div class="panel-head"><h3>Security</h3></div><label class="field">New password<input id="np" type="password" placeholder="Leave blank to keep current password"></label><label class="field">Confirm new password<input id="npc" type="password"></label><button class="ghost" onclick="changePassword()">Change password</button></div></div>`}
-function saveProfile(){let u=currentUser(),name=document.getElementById('pn').value.trim(),email=document.getElementById('pe').value.trim().toLowerCase();if(name.length<2||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Enter a valid name and email.');return}if(state.users.some(x=>x.id!==u.id&&x.email.toLowerCase()===email)){toast('That email is already in use.');return}u.name=name;u.email=email;state.user=u;save();toast('Profile updated.');render()}
-function savePreferences(){let u=currentUser();u.preferences=[...document.querySelectorAll('.checkbox-grid input:checked')].map(x=>x.value);state.user=u;save();toast('Reading interests saved.');render()}
-function changePassword(){let u=currentUser(),p=document.getElementById('np').value,c=document.getElementById('npc').value;if(!p)return toast('Enter a new password.');if(p.length<6)return toast('Password must be at least 6 characters.');if(p!==c)return toast('Passwords do not match.');u.password=p;state.user=u;save();toast('Password changed.');render()}
-function bookForm(){let b=state.editingBook;return `<div class="admin-form"><div class="panel-head"><h3>${b?'Edit book':'Add new book'}</h3>${b?`<button class="admin-btn" onclick="state.editingBook=null;render()">Cancel</button>`:''}</div><div class="form-grid"><label class="field">Title<input id="bt" value="${esc(b?.title||'')}"></label><label class="field">Author<input id="ba" value="${esc(b?.author||'')}"></label><label class="field">Category<select id="bc">${['Computer Science','Literature','Personal Development','Business','Psychology','Fiction'].map(c=>`<option ${b?.category===c?'selected':''}>${c}</option>`).join('')}</select></label><label class="field">ISBN<input id="bi" value="${esc(b?.isbn||'')}"></label><label class="field">Total copies<input id="bcopies" type="number" min="1" value="${b?.total_copies||3}"></label><label class="field wide">Description<textarea id="bd">${esc(b?.description||'')}</textarea></label><label class="field wide">Keywords<input id="bk" value="${esc((b?.keywords||[]).join(', '))}" placeholder="programming, software, systems"></label></div><button class="primary" onclick="saveBook()">${b?'Save changes':'Add book'} →</button></div>`}
-function saveBook(){let title=document.getElementById('bt').value.trim(),author=document.getElementById('ba').value.trim(),copies=Math.max(1,Number(document.getElementById('bcopies').value||1));if(!title||!author){toast('Title and author are required.');return}let data={title,author,category:document.getElementById('bc').value,isbn:document.getElementById('bi').value.trim(),description:document.getElementById('bd').value.trim(),keywords:document.getElementById('bk').value.split(',').map(x=>x.trim()).filter(Boolean)};if(state.editingBook){let b=state.editingBook,borrowed=b.total_copies-b.available_copies;b.total_copies=Math.max(copies,borrowed);b.available_copies=b.total_copies-borrowed;Object.assign(b,data);audit('Updated book',title);toast('Book updated.')}else{state.books.unshift({id:'b'+Date.now(),...data,total_copies:copies,available_copies:copies,availability:true});audit('Added book',title);toast('Book added.')}state.editingBook=null;save();render()}
-function adminBooks(){let avail=state.books.filter(b=>b.available_copies>0).length;return adminShell(`${adminHeader('Books','Manage catalogue records, copies, availability and book information.',`<button class="primary" onclick="state.editingBook=null;render()">+ Add book</button>`)}${bookForm()}<div class="panel"><div class="panel-head"><h3>Catalogue inventory</h3><span>${state.books.length} titles · ${state.books.reduce((n,b)=>n+b.total_copies,0)} copies</span></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Book</th><th>Category</th><th>Copies</th><th>Status</th><th>Actions</th></tr></thead><tbody>${state.books.map(b=>`<tr><td><b>${esc(b.title)}</b><br><span>${esc(b.author)}</span></td><td>${esc(b.category)}</td><td>${b.available_copies}/${b.total_copies}</td><td><span class="status-pill ${b.available_copies?'status-green':'status-red'}">${b.available_copies?'Available':'Out'}</span></td><td><button class="admin-btn" onclick="editBook('${b.id}')">Edit</button> <button class="admin-btn danger" onclick="deleteBook('${b.id}')">Delete</button></td></tr>`).join('')}</tbody></table></div></div>`)}
-function editBook(id){state.editingBook=state.books.find(b=>b.id===id)||null;state.adminTab='books';render()}
-function deleteBook(id){let b=state.books.find(x=>x.id===id);if(!b)return;if(state.borrowing.some(x=>x.book_id===id&&x.status==='borrowed')){toast('Return all copies before deleting this title.');return}if(!confirm(`Delete "${b.title}" from the catalogue?`))return;state.books=state.books.filter(x=>x.id!==id);audit('Deleted book',b.title);save();toast('Book deleted.');render()}
-function adminMembers(){let members=state.users.filter(x=>x.role==='member');return adminShell(`${adminHeader('Members','Review registered members, status and borrowing activity.') }<div class="panel"><div class="panel-head"><h3>Registered members</h3><span>${members.length} members</span></div><div class="admin-list">${members.map(u=>{let loans=state.borrowing.filter(x=>x.user_id===u.id),active=loans.filter(x=>x.status==='borrowed').length;return `<div class="member-row"><div class="member-avatar">${esc(u.name[0]||'?')}</div><div class="grow"><b>${esc(u.name)}</b><small>${esc(u.email)} · Joined ${u.created_at}</small></div><span>${active} active</span><span class="status-pill ${u.active===false?'status-red':'status-green'}">${u.active===false?'Inactive':'Active'}</span><button class="admin-btn" onclick="toggleMember('${u.id}')">${u.active===false?'Activate':'Suspend'}</button><button class="admin-btn" onclick="viewMember('${u.id}')">History</button></div>`}).join('')||'<div class="admin-empty">No registered members.</div>'}</div></div>${state.selectedMember?memberDetailAdmin(state.selectedMember):''}`)}
-function toggleMember(id){let u=state.users.find(x=>x.id===id);if(!u)return;u.active=u.active===false;state.selectedMember=null;audit(u.active?'Activated member':'Suspended member',u.email);save();toast(u.active?'Member activated.':'Member suspended.');render()}
-function viewMember(id){state.selectedMember=id;render()}
-function memberDetailAdmin(id){let u=state.users.find(x=>x.id===id);if(!u)return '';let rows=state.borrowing.filter(x=>x.user_id===id).reverse();return `<div class="panel" style="margin-top:18px"><div class="panel-head"><h3>${esc(u.name)} — borrowing history</h3><button class="admin-btn" onclick="state.selectedMember=null;render()">Close</button></div>${rows.map(x=>{let b=state.books.find(y=>y.id===x.book_id);return `<div class="loan"><div class="mini">${esc((b?.title||'?').slice(0,2).toUpperCase())}</div><div><b>${esc(b?.title||'Unknown')}</b><span>${x.borrow_date} → ${x.return_date||'Not returned'} · ${statusLabel(x)}</span></div></div>`}).join('')||'<p class="small-note">No transactions.</p>'}</div>`}
-function adminLoans(){let rows=state.borrowing.slice().reverse();return adminShell(`${adminHeader('Borrowing & returns','Monitor circulation, due dates and overdue books.') }<div class="metrics"><div class="metric"><span>Total transactions</span><b>${state.borrowing.length}</b></div><div class="metric"><span>Active</span><b>${state.borrowing.filter(x=>x.status==='borrowed').length}</b></div><div class="metric"><span>Returned</span><b>${state.borrowing.filter(x=>x.status==='returned').length}</b></div><div class="metric"><span>Overdue</span><b>${state.borrowing.filter(overdue).length}</b></div></div><div class="panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Member</th><th>Book</th><th>Borrowed</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows.map(x=>{let u=state.users.find(y=>y.id===x.user_id),b=state.books.find(y=>y.id===x.book_id);return `<tr><td>${esc(u?.name||'Unknown')}</td><td>${esc(b?.title||'Unknown')}</td><td>${x.borrow_date}</td><td>${x.due_date}</td><td><span class="status-pill ${statusClass(x)}">${statusLabel(x)}</span></td><td>${x.status==='borrowed'?`<button class="admin-btn" onclick="adminReturn('${x.id}')">Mark returned</button>`:'—'}</td></tr>`}).join('')}</tbody></table></div></div>`)}
-function adminReturn(id){ret(id);audit('Marked borrowing returned',id);state.adminTab='loans';render()}
-function adminReports(){let total=state.borrowing.length,returned=state.borrowing.filter(x=>x.status==='returned').length,active=state.borrowing.filter(x=>x.status==='borrowed'),over=active.filter(overdue),copies=state.books.reduce((n,b)=>n+b.total_copies,0),avail=state.books.reduce((n,b)=>n+b.available_copies,0);let popular=state.books.map(b=>({...b,count:state.borrowing.filter(x=>x.book_id===b.id).length})).sort((a,b)=>b.count-a.count).slice(0,5);let max=Math.max(1,...popular.map(x=>x.count));return adminShell(`${adminHeader('Reports & analytics','Collection, circulation and usage reports.') }<div class="admin-card-grid"><div class="admin-stat"><small>Catalogue titles</small><strong>${state.books.length}</strong></div><div class="admin-stat"><small>Total copies</small><strong>${copies}</strong></div><div class="admin-stat"><small>Return rate</small><strong>${total?Math.round(returned/total*100):0}%</strong></div><div class="admin-stat"><small>Availability</small><strong>${copies?Math.round(avail/copies*100):0}%</strong></div></div><div class="admin-cols"><div class="panel"><div class="panel-head"><h3>Most borrowed books</h3></div>${popular.map(x=>`<div class="report-bar"><label><span>${esc(x.title)}</span><span>${x.count}</span></label><div class="bar-track"><div class="bar-fill" style="width:${Math.max(4,x.count/max*100)}%"></div></div></div>`).join('')||'<p class="small-note">No borrowing data yet.</p>'}</div><div class="panel"><div class="panel-head"><h3>Circulation summary</h3></div><div class="loan"><div class="mini">A</div><div><b>Active loans</b><span>Currently borrowed</span></div><strong>${active.length}</strong></div><div class="loan"><div class="mini">R</div><div><b>Returned</b><span>Completed transactions</span></div><strong>${returned}</strong></div><div class="loan"><div class="mini">O</div><div><b>Overdue</b><span>Past due date</span></div><strong>${over.length}</strong></div></div></div><div class="panel" style="margin-top:18px"><div class="panel-head"><h3>Admin audit log</h3></div>${state.audit.slice(0,12).map(a=>`<div class="audit-item"><b>${esc(a.action)}</b><small>${esc(a.details)} · ${new Date(a.date).toLocaleString()}</small></div>`).join('')||'<p class="small-note">No administrative activity recorded.</p>'}</div>`)}
-function adminOverview(){let active=state.borrowing.filter(x=>x.status==='borrowed'),over=active.filter(overdue),popular=state.books.map(b=>({...b,count:state.borrowing.filter(x=>x.book_id===b.id).length})).sort((a,b)=>b.count-a.count).slice(0,5);return adminShell(`${adminHeader('Royal Library control centre','Monitor collection, members, circulation and system activity.') }<div class="admin-card-grid"><div class="admin-stat"><small>Total titles</small><strong>${state.books.length}</strong></div><div class="admin-stat"><small>Members</small><strong>${state.users.filter(x=>x.role==='member').length}</strong></div><div class="admin-stat"><small>Active loans</small><strong>${active.length}</strong></div><div class="admin-stat"><small>Overdue</small><strong>${over.length}</strong></div></div><div class="admin-cols"><div class="panel"><div class="panel-head"><h3>Recent borrowing</h3><button class="text-btn" onclick="adminTab('loans')">View all →</button></div>${state.borrowing.slice().reverse().slice(0,7).map(x=>{let u=state.users.find(y=>y.id===x.user_id),b=state.books.find(y=>y.id===x.book_id);return `<div class="loan"><div class="mini">${esc((b?.title||'?').slice(0,2).toUpperCase())}</div><div><b>${esc(b?.title||'Unknown')}</b><span>${esc(u?.name||'Unknown')} · ${statusLabel(x)}</span></div></div>`}).join('')||'<p class="small-note">No borrowing activity yet.</p>'}</div><div class="panel"><div class="panel-head"><h3>Most borrowed</h3></div>${popular.map(x=>`<div class="loan"><div class="mini">${x.count}</div><div><b>${esc(x.title)}</b><span>${esc(x.author)}</span></div></div>`).join('')}</div></div><div class="panel" style="margin-top:18px"><div class="panel-head"><h3>Quick actions</h3></div><div class="quick-grid"><button class="quick" onclick="adminTab('books')"><b>Manage books</b><span>Add, edit, copies and catalogue records.</span></button><button class="quick" onclick="adminTab('members')"><b>Manage members</b><span>Activate, suspend and inspect users.</span></button><button class="quick" onclick="adminTab('reports')"><b>View reports</b><span>Circulation and usage statistics.</span></button></div></div>`)}
-function admin(){if(state.adminTab==='books')return adminBooks();if(state.adminTab==='members')return adminMembers();if(state.adminTab==='loans')return adminLoans();if(state.adminTab==='reports')return adminReports();return adminOverview()}
-function logout(){state.user=null;save();state.page='home';render()}
+function setAuth(token,user){
+  authToken = token || '';
+  currentUser = user || null;
+  if(token) localStorage.setItem('royal_library_token', token);
+  else localStorage.removeItem('royal_library_token');
+}
+
+/* =========================
+   ROYAL LIBRARY — SUPABASE
+   ========================= */
+const API_BASE = window.ROYAL_LIBRARY_API || window.location.origin + '/api';
+let currentUser = null;
 
 
+let state={
+  page:'home', query:'', category:'All', selected:null, user:null,
+  books:[], categories:[], borrowings:[], favourites:[], preferences:[],
+  notifications:[], activities:[], users:[], audit:[],
+  adminTab:'overview', memberTab:'overview', editingBook:null, selectedMember:null
+};
 
-/* ========================= REAL SUPABASE ADAPTER ========================= */
-const SUPABASE_CONFIG=window.ROYAL_LIBRARY_SUPABASE;
-const supabaseClient=(window.supabase&&SUPABASE_CONFIG.projectUrl&&SUPABASE_CONFIG.publishableKey)
-  ? window.supabase.createClient(SUPABASE_CONFIG.projectUrl,SUPABASE_CONFIG.publishableKey)
-  : null;
-let sbCategories=[];
-function mapBook(row){return {...row,id:row.id,category:row.categories?.name||'Uncategorized',category_id:row.category_id,availability:row.available_copies>0,keywords:row.keywords||[]}}
-function mapProfile(row){return {id:row.id,name:row.full_name,email:row.email||'',role:row.role,status:row.status,active:row.status==='active',created_at:(row.created_at||'').slice(0,10),preferences:[]}}
-async function refreshRealData(){
-  if(!supabaseClient)return false;
-  const {data:{session}}=await supabaseClient.auth.getSession();
-  state.user=null;
-  const booksQ=await supabaseClient.from('books').select('*,categories(name)').order('created_at',{ascending:false});
-  if(booksQ.error){console.warn(booksQ.error);return false}
-  state.books=(booksQ.data||[]).map(mapBook);
-  const catsQ=await supabaseClient.from('categories').select('*').order('name');
-  sbCategories=catsQ.data||[];
-  if(session){
-    const p=await supabaseClient.from('profiles').select('*').eq('id',session.user.id).single();
-    if(!p.error&&p.data){
-      state.user=mapProfile(p.data);
-      const [bor,fav,pref,notifs,acts]=await Promise.all([
-        supabaseClient.from('borrowings').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}),
-        supabaseClient.from('favourites').select('book_id').eq('user_id',session.user.id),
-        supabaseClient.from('user_preferences').select('category_id').eq('user_id',session.user.id),
-        supabaseClient.from('notifications').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(20),
-        supabaseClient.from('activities').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(200)
-      ]);
-      state.borrowing=bor.data||[];
-      state.user.favorite_ids=(fav.data||[]).map(x=>x.book_id);
-      state.user.preferences=(pref.data||[]).map(x=>(sbCategories.find(c=>c.id===x.category_id)||{}).name).filter(Boolean);
-      state.notifications=notifs.data||[]; state.activities=acts.data||[];
-    }
-    if(state.user?.role==='admin'){
-      const [profiles,allBorrow,audit]=await Promise.all([
-        supabaseClient.from('profiles').select('*').order('created_at',{ascending:false}),
-        supabaseClient.from('borrowings').select('*').order('created_at',{ascending:false}),
-        supabaseClient.from('admin_logs').select('*').order('created_at',{ascending:false}).limit(100)
-      ]);
-      state.users=(profiles.data||[]).map(mapProfile);
-      state.borrowing=allBorrow.data||[];
-      state.audit=(audit.data||[]).map(a=>({action:a.action,details:JSON.stringify(a.details||{}),date:a.created_at}));
-    }
-    else state.users=state.user?[state.user]:[];
-  } else {
-    state.users=[];state.borrowing=[];state.audit=[];
-  }
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+function toast(message,type=''){state.toast={message,type};render();clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>{state.toast=null;render()},4000)}
+function loading(message='Loading…'){return `<div class="page"><div class="notice">${esc(message)}</div></div>`}
+function dateOnly(d){return d?new Date(d).toLocaleDateString():''}
+function initials(s){return esc((s||'?').split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase())}
+function getCategory(id){return state.categories.find(c=>c.id===id)?.name||'Uncategorized'}
+function mapBook(b){return {...b,category:getCategory(b.category_id),availability:(b.available_copies||0)>0}}
+function activeLoans(){return state.borrowings.filter(x=>x.status==='borrowed'||x.status==='overdue')}
+function overdue(x){return x.status==='overdue'||(x.status==='borrowed'&&new Date(x.due_date+'T23:59:59')<new Date())}
+
+async function apiError(error,context){
+  console.error(context,error);
+  if(!error)return;
+  if(error.name==='TypeError'||/fetch|network|failed/i.test(error.message||'')){
+    toast('Cannot reach Supabase. Check your internet connection, Supabase project URL, and browser network access. Open the browser console for details.','error');
+  }else toast(error.message||`${context} failed`,'error');
+}
+
+/* ---------- data loading ---------- */
+async function loadPublic(){
+  const [books,cats]=await Promise.all([
+    renderDbRemoved.from('books').select('*').order('created_at',{ascending:false}),
+    renderDbRemoved.from('categories').select('*').order('name')
+  ]);
+  if(books.error){await apiError(books.error,'Loading books');return false}
+  if(cats.error){await apiError(cats.error,'Loading categories');return false}
+  state.categories=cats.data||[];
+  state.books=(books.data||[]).map(mapBook);
   return true;
 }
-function realMode(){return !!supabaseClient}
-async function registerAction(){
-  const name=document.getElementById('regName').value.trim(),email=document.getElementById('regEmail').value.trim().toLowerCase(),password=document.getElementById('regPassword').value,confirm=document.getElementById('regConfirm').value;
-  if(name.length<2)return toast('Enter your full name.');
-  if(!/^\S+@\S+\.\S+$/.test(email))return toast('Enter a valid email address.');
-  if(password.length<6)return toast('Password must be at least 6 characters.');
-  if(password!==confirm)return toast('Passwords do not match.');
-  if(!supabaseClient)return toast('Supabase is not configured.');
-  const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name}}});
-  if(error)return toast(error.message);
-  if(!data.session){toast('Account created. Check your email to confirm the account.');state.page='login';render();return}
-  await refreshRealData();state.page='dashboard';state.memberTab='profile';render();toast('Account created successfully.');
-}
-async function loginAction(){
-  const email=document.getElementById('email').value.trim().toLowerCase(),password=document.getElementById('password').value;
-  if(!email||!password)return toast('Enter your email and password.');
-  if(!supabaseClient)return toast('Supabase is not configured.');
-  const {error}=await supabaseClient.auth.signInWithPassword({email,password});
-  if(error)return toast(error.message);
-  await refreshRealData();state.page=state.user?.role==='admin'?'admin':'dashboard';render();toast('Signed in successfully.');
-}
-async function logout(){if(supabaseClient)await supabaseClient.auth.signOut();state.user=null;state.page='home';state.users=[];state.borrowing=[];render()}
-async function borrow(id){
-  if(!state.user){toast('Sign in to borrow a book.');return go('login');}
-  if(!supabaseClient)return toast('Supabase is not configured.');
-  const due=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
-  const {error}=await supabaseClient.rpc('borrow_book',{p_book_id:id,p_due_date:due});
-  if(error)return toast(error.message);
-  await refreshRealData();state.selected=state.books.find(b=>b.id===id);toast('Book borrowed. Due in 14 days.');render();
-}
-async function ret(id){
-  if(!supabaseClient)return toast('Supabase is not configured.');
-  const {error}=await supabaseClient.rpc('return_book',{p_borrowing_id:id});
-  if(error)return toast(error.message);
-  await refreshRealData();toast('Book returned.');render();
-}
-async function saveProfile(){
-  const u=state.user,name=document.getElementById('pn').value.trim(),email=document.getElementById('pe').value.trim().toLowerCase();
-  if(name.length<2||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return toast('Enter a valid name and email.');
-  const {error}=await supabaseClient.from('profiles').update({full_name:name,email}).eq('id',u.id);
-  if(error)return toast(error.message);await refreshRealData();toast('Profile updated.');render();
-}
-async function savePreferences(){
-  const u=state.user;if(!u)return;
-  const names=[...document.querySelectorAll('.checkbox-grid input:checked')].map(x=>x.value);
-  const ids=sbCategories.filter(c=>names.includes(c.name)).map(c=>({user_id:u.id,category_id:c.id}));
-  const d=await supabaseClient.from('user_preferences').delete().eq('user_id',u.id);if(d.error)return toast(d.error.message);
-  if(ids.length){const ins=await supabaseClient.from('user_preferences').insert(ids);if(ins.error)return toast(ins.error.message)}
-  await refreshRealData();toast('Reading interests saved.');render();
-}
-async function changePassword(){const p=document.getElementById('np').value,c=document.getElementById('npc').value;if(!p)return toast('Enter a new password.');if(p.length<6)return toast('Password must be at least 6 characters.');if(p!==c)return toast('Passwords do not match.');const {error}=await supabaseClient.auth.updateUser({password:p});if(error)return toast(error.message);toast('Password changed.');render()}
-async function toggleFavorite(id){
-  if(!state.user)return go('login');
-  const on=(state.user.favorite_ids||[]).includes(id);
-  const q=on?supabaseClient.from('favourites').delete().eq('user_id',state.user.id).eq('book_id',id):supabaseClient.from('favourites').insert({user_id:state.user.id,book_id:id});
-  const {error}=await q;if(error)return toast(error.message);await refreshRealData();toast(on?'Removed from favourites.':'Added to favourites.');render();
-}
-async function saveBook(){
-  if(!state.user||state.user.role!=='admin')return toast('Administrator access required.');
-  const title=document.getElementById('bt').value.trim(),author=document.getElementById('ba').value.trim(),copies=Math.max(1,Number(document.getElementById('bcopies').value||1));
-  if(!title||!author)return toast('Title and author are required.');
-  const cat=sbCategories.find(c=>c.name===document.getElementById('bc').value);
-  const data={title,author,category_id:cat?.id||null,isbn:document.getElementById('bi').value.trim()||null,description:document.getElementById('bd').value.trim(),keywords:document.getElementById('bk').value.split(',').map(x=>x.trim()).filter(Boolean)};
-  let result;
-  if(state.editingBook){const b=state.editingBook;const borrowed=(b.total_copies||0)-(b.available_copies||0);data.total_copies=Math.max(copies,borrowed);data.available_copies=data.total_copies-borrowed;result=await supabaseClient.from('books').update(data).eq('id',b.id)}
-  else {data.total_copies=copies;data.available_copies=copies;result=await supabaseClient.from('books').insert(data)}
-  if(result.error)return toast(result.error.message);state.editingBook=null;await refreshRealData();toast('Book saved.');render();
-}
-async function deleteBook(id){if(!confirm('Delete this book from the catalogue?'))return;const {error}=await supabaseClient.from('books').delete().eq('id',id);if(error)return toast(error.message);await refreshRealData();toast('Book deleted.');render()}
-async function toggleMember(id){const u=state.users.find(x=>x.id===id);if(!u)return;const next=u.active===false?'active':'suspended';const {error}=await supabaseClient.from('profiles').update({status:next}).eq('id',id);if(error)return toast(error.message);await refreshRealData();toast(next==='active'?'Member activated.':'Member suspended.');render()}
-async function adminReturn(id){await ret(id);state.adminTab='loans';render()}
-async function boot(){
-  if(!supabaseClient){render();return}
-  try{await refreshRealData();supabaseClient.auth.onAuthStateChange(async()=>{setTimeout(async()=>{await refreshRealData();render()},0)});render();}
-  catch(e){console.error(e);toast('Could not connect to Royal Library database. Run the Supabase schema first.');render()}
+
+async function loadUser(){
+  const {data,error}=await renderAuthRemoved.getSession();
+  if(error){await apiError(error,'Checking session');return false}
+  state.user=null; state.borrowings=[]; state.favourites=[]; state.preferences=[]; state.notifications=[]; state.activities=[];
+  if(!data.session)return true;
+
+  const uid=data.session.user.id;
+  const p=await renderDbRemoved.from('profiles').select('*').eq('id',uid).maybeSingle();
+  if(p.error){await apiError(p.error,'Loading profile');return false}
+  if(!p.data){toast('Your Auth account exists but its library profile was not created. Check the Supabase profile trigger.','error');return false}
+  state.user={...p.data,name:p.data.full_name,active:p.data.status==='active'};
+
+  const [bor,fav,pref,notifs,acts]=await Promise.all([
+    renderDbRemoved.from('borrowings').select('*').eq('user_id',uid).order('created_at',{ascending:false}),
+    renderDbRemoved.from('favourites').select('book_id').eq('user_id',uid),
+    renderDbRemoved.from('user_preferences').select('category_id').eq('user_id',uid),
+    renderDbRemoved.from('notifications').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(30),
+    renderDbRemoved.from('activities').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(200)
+  ]);
+  if(bor.error||fav.error||pref.error||notifs.error||acts.error){
+    const e=bor.error||fav.error||pref.error||notifs.error||acts.error;
+    await apiError(e,'Loading member data');return false;
+  }
+  state.borrowings=bor.data||[];
+  state.favourites=(fav.data||[]).map(x=>x.book_id);
+  state.preferences=(pref.data||[]).map(x=>x.category_id);
+  state.notifications=notifs.data||[];
+  state.activities=acts.data||[];
+
+  if(state.user.role==='admin')await loadAdminData();
+  return true;
 }
 
-boot();
+async function loadAdminData(){
+  const [profiles,bor,audit]=await Promise.all([
+    renderDbRemoved.from('profiles').select('*').order('created_at',{ascending:false}),
+    renderDbRemoved.from('borrowings').select('*').order('created_at',{ascending:false}),
+    renderDbRemoved.from('admin_logs').select('*').order('created_at',{ascending:false}).limit(100)
+  ]);
+  const e=profiles.error||bor.error||audit.error;
+  if(e){await apiError(e,'Loading admin data');return}
+  state.users=profiles.data||[];
+  state.borrowings=bor.data||[];
+  state.audit=audit.data||[];
+}
+
+/* ---------- auth ---------- */
+async function registerAction(){
+  const name=$('regName').value.trim(),email=$('regEmail').value.trim().toLowerCase();
+  const password=$('regPassword').value,confirm=$('regConfirm').value;
+  if(name.length<2)return toast('Enter your full name.','error');
+  if(!/^\S+@\S+\.\S+$/.test(email))return toast('Enter a valid email address.','error');
+  if(password.length<6)return toast('Password must be at least 6 characters.','error');
+  if(password!==confirm)return toast('Passwords do not match.','error');
+
+  const {data,error}=await renderAuthRemoved.signUp({
+    email,password,
+    options:{data:{full_name:name}}
+  });
+  if(error){await apiError(error,'Account creation');return}
+
+  if(!data.session){
+    state.page='login';render();
+    toast('Account created. Check your email to confirm the account.','success');
+    return;
+  }
+  await loadPublic();await loadUser();
+  state.page='dashboard';state.memberTab='overview';render();
+  toast('Account created successfully.','success');
+}
+
+async function loginAction(){
+  const email=$('email').value.trim().toLowerCase(),password=$('password').value;
+  if(!email||!password)return toast('Enter your email and password.','error');
+  const {error}=await renderAuthRemoved.signInWithPassword({email,password});
+  if(error){await apiError(error,'Sign in');return}
+  await loadPublic();await loadUser();
+  state.page=state.user?.role==='admin'?'admin':'dashboard';render();
+  toast('Signed in successfully.','success');
+}
+
+async function logout(){
+  const {error}=await renderAuthRemoved.signOut();
+  if(error)await apiError(error,'Sign out');
+  state.user=null;state.borrowings=[];state.favourites=[];state.preferences=[];state.notifications=[];state.activities=[];
+  state.page='home';render();
+}
+
+/* ---------- catalogue / circulation ---------- */
+async function borrow(id){
+  if(!state.user){state.page='login';render();return toast('Sign in to borrow a book.','error')}
+  if(state.user.status==='suspended')return toast('Your library account is suspended.','error');
+  const due=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
+  const {error}=await renderRpcRemoved('borrow_book',{p_book_id:id,p_due_date:due});
+  if(error){await apiError(error,'Borrow book');return}
+  await loadPublic();await loadUser();state.selected=state.books.find(b=>b.id===id);render();toast('Book borrowed successfully.','success');
+}
+
+async function returnBook(id){
+  const {error}=await renderRpcRemoved('return_book',{p_borrowing_id:id});
+  if(error){await apiError(error,'Return book');return}
+  await loadPublic();await loadUser();render();toast('Book returned successfully.','success');
+}
+
+async function toggleFavorite(id){
+  if(!state.user){state.page='login';render();return}
+  const exists=state.favourites.includes(id);
+  const q=exists
+    ? renderDbRemoved.from('favourites').delete().eq('user_id',state.user.id).eq('book_id',id)
+    : renderDbRemoved.from('favourites').insert({user_id:state.user.id,book_id:id});
+  const {error}=await q;
+  if(error){await apiError(error,'Favourite');return}
+  await loadUser();render();toast(exists?'Removed from favourites.':'Added to favourites.','success');
+}
+
+async function saveProfile(){
+  const name=$('pn').value.trim(),email=$('pe').value.trim().toLowerCase();
+  if(name.length<2||!/^\S+@\S+\.\S+$/.test(email))return toast('Enter a valid name and email.','error');
+  const {error}=await renderDbRemoved.from('profiles').update({full_name:name,email}).eq('id',state.user.id);
+  if(error){await apiError(error,'Update profile');return}
+  await loadUser();render();toast('Profile updated.','success');
+}
+
+async function savePreferences(){
+  const ids=[...document.querySelectorAll('.pref-check:checked')].map(x=>x.value);
+  const d=await renderDbRemoved.from('user_preferences').delete().eq('user_id',state.user.id);
+  if(d.error){await apiError(d.error,'Clear preferences');return}
+  if(ids.length){
+    const i=await renderDbRemoved.from('user_preferences').insert(ids.map(category_id=>({user_id:state.user.id,category_id})));
+    if(i.error){await apiError(i.error,'Save preferences');return}
+  }
+  await loadUser();render();toast('Reading interests saved.','success');
+}
+
+async function changePassword(){
+  const p=$('newPassword').value,c=$('confirmPassword').value;
+  if(p.length<6)return toast('Password must be at least 6 characters.','error');
+  if(p!==c)return toast('Passwords do not match.','error');
+  const {error}=await renderAuthRemoved.updateUser({password:p});
+  if(error){await apiError(error,'Change password');return}
+  $('newPassword').value='';$('confirmPassword').value='';
+  toast('Password changed successfully.','success');
+}
+
+/* ---------- admin ---------- */
+async function saveBook(){
+  if(!state.user||state.user.role!=='admin')return toast('Administrator access required.','error');
+  const title=$('bt').value.trim(),author=$('ba').value.trim();
+  const copies=Math.max(1,Number($('bcopies').value||1));
+  const category_id=$('bc').value||null;
+  if(!title||!author)return toast('Title and author are required.','error');
+  const data={
+    title,author,category_id,
+    isbn:$('bi').value.trim()||null,
+    description:$('bd').value.trim(),
+    keywords:$('bk').value.split(',').map(x=>x.trim()).filter(Boolean)
+  };
+  let result;
+  if(state.editingBook){
+    const b=state.editingBook;
+    const borrowed=(b.total_copies||0)-(b.available_copies||0);
+    data.total_copies=Math.max(copies,borrowed);
+    data.available_copies=data.total_copies-borrowed;
+    result=await renderDbRemoved.from('books').update(data).eq('id',b.id);
+  }else{
+    data.total_copies=copies;data.available_copies=copies;
+    result=await renderDbRemoved.from('books').insert(data);
+  }
+  if(result.error){await apiError(result.error,'Save book');return}
+  state.editingBook=null;await loadPublic();await loadUser();render();toast('Book saved.','success');
+}
+
+async function deleteBook(id){
+  if(!confirm('Delete this book from the catalogue?'))return;
+  const {error}=await renderDbRemoved.from('books').delete().eq('id',id);
+  if(error){await apiError(error,'Delete book');return}
+  await loadPublic();await loadUser();render();toast('Book deleted.','success');
+}
+
+async function toggleMember(id){
+  const u=state.users.find(x=>x.id===id);if(!u)return;
+  const status=u.status==='active'?'suspended':'active';
+  const {error}=await renderDbRemoved.from('profiles').update({status}).eq('id',id);
+  if(error){await apiError(error,'Update member');return}
+  await loadUser();render();toast(status==='active'?'Member activated.':'Member suspended.','success');
+}
+
+/* ---------- UI ---------- */
+function header(){
+  return `<header class="nav">
+    <div class="brand" onclick="go('home')">Royal Library<span>.</span></div>
+    <nav class="navlinks">
+      <button onclick="go('home')">Home</button><button onclick="go('catalog')">Catalogue</button>
+      ${state.user?`<button onclick="go('${state.user.role==='admin'?'admin':'dashboard'}')">${state.user.role==='admin'?'Admin':'My Library'}</button>`:''}
+    </nav>
+    <div class="nav-search">⌕<input value="${esc(state.query)}" oninput="state.query=this.value;state.page='catalog';render()" placeholder="Search books"></div>
+    ${state.user?`<button class="nav-action" onclick="logout()">Logout</button><div>${initials(state.user.name)}</div>`:`<button class="nav-action" onclick="go('login')">Sign in</button><button class="primary" onclick="go('register')">Create account</button>`}
+  </header>`;
+}
+
+function cover(b){return `<div class="cover">${esc((b.title||'').split(' ').slice(0,2).map(x=>x[0]).join(''))}</div>`}
+function card(b){
+  const fav=state.favourites.includes(b.id);
+  return `<article class="book-card" onclick="details('${b.id}')">${cover(b)}
+    <div class="book-info"><span class="category">${esc(b.category)}</span><h3>${esc(b.title)}</h3><p>${esc(b.author)}</p>
+    <div class="card-bottom"><span class="${b.availability?'available':'unavailable'}">${b.availability?'Available':'Unavailable'}</span>${state.user?`<button onclick="event.stopPropagation();toggleFavorite('${b.id}')">${fav?'♥':'♡'}</button>`:''}</div></div>
+  </article>`;
+}
+
+function home(){
+  const books=state.books.slice(0,4);
+  return `<section class="hero"><div><span class="eyebrow">DIGITAL LIBRARY + PERSONALIZED DISCOVERY</span>
+  <h1>Find the next book worth your time.</h1><p>A web-based library management platform for cataloguing, circulation, member accounts and personalized book discovery.</p>
+  <div class="actions"><button class="primary" onclick="go('catalog')">Explore catalogue →</button><button class="ghost" onclick="go('login')">Member access</button></div></div>
+  <div class="hero-card"><span class="eyebrow">ROYAL LIBRARY</span><h2>Real library data</h2><p style="color:#c3d0c9">Books, members, borrowing and recommendations are connected to your Supabase database.</p>
+  <div class="signal">✓ Secure authentication<br>✓ Live catalogue<br>✓ Borrowing and returns<br>✓ Personalized discovery</div></div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">CATALOGUE</span><h2>Featured books</h2></div><button class="ghost" onclick="go('catalog')">Browse all →</button></div>
+  <div class="book-grid">${books.map(card).join('')||'<div class="panel">No books have been added yet.</div>'}</div></section>`;
+}
+
+function catalogue(){
+  let books=state.books;
+  const q=state.query.trim().toLowerCase();
+  if(q)books=books.filter(b=>`${b.title} ${b.author} ${b.category} ${(b.keywords||[]).join(' ')}`.toLowerCase().includes(q));
+  if(state.category!=='All')books=books.filter(b=>b.category===state.category);
+  return `<section class="page"><div class="page-heading"><div><span class="eyebrow">COLLECTION</span><h1>Catalogue</h1></div><div class="searchbox"><input value="${esc(state.query)}" oninput="state.query=this.value;render()" placeholder="Search title, author, keyword"></div></div>
+  <div class="chips"><button class="chip ${state.category==='All'?'active':''}" onclick="state.category='All';render()">All</button>${state.categories.map(c=>`<button class="chip ${state.category===c.name?'active':''}" onclick="state.category='${esc(c.name)}';render()">${esc(c.name)}</button>`).join('')}</div>
+  <div class="book-grid">${books.map(card).join('')||'<div class="panel">No books match your search.</div>'}</div></section>`;
+}
+
+function details(id){
+  state.selected=state.books.find(b=>b.id===id);state.page='details';render();
+}
+function detail(){
+  const b=state.selected;if(!b)return catalogue();
+  const loan=state.borrowings.find(x=>x.book_id===b.id&&['borrowed','overdue'].includes(x.status));
+  return `<section class="page"><button class="ghost" onclick="go('catalog')">← Back</button><div class="details">${cover(b)}<div><span class="category">${esc(b.category)}</span><h1>${esc(b.title)}</h1><p><b>by ${esc(b.author)}</b></p><p>${esc(b.description||'No description available.')}</p>
+  <div class="meta"><div><small>ISBN</small><b>${esc(b.isbn||'—')}</b></div><div><small>Availability</small><b>${b.available_copies}/${b.total_copies}</b></div></div>
+  <div class="tags">${(b.keywords||[]).map(k=>`<span class="tag">${esc(k)}</span>`).join('')}</div>
+  ${state.user&&loan&&loan.user_id===state.user.id?`<button class="primary" onclick="returnBook('${loan.id}')">Return this book</button>`:`<button class="primary" ${b.availability?'':'disabled'} onclick="borrow('${b.id}')">${b.availability?'Borrow this book':'Currently unavailable'}</button>`}
+  </div></div></section>`;
+}
+
+function login(){
+ return `<div class="auth-wrap"><div class="auth"><span class="eyebrow">ROYAL LIBRARY ACCESS</span><h1>Welcome back</h1><p>Sign in to borrow books and manage your library account.</p>
+ <label class="field">Email<input id="email" type="email" autocomplete="email"></label><label class="field">Password<input id="password" type="password" autocomplete="current-password"></label>
+ <button class="primary full" onclick="loginAction()">Sign in →</button><p style="text-align:center">Don't have an account? <button class="ghost" onclick="go('register')">Create one</button></p></div></div>`;
+}
+
+function register(){
+ return `<div class="auth-wrap"><div class="auth"><span class="eyebrow">ROYAL LIBRARY MEMBERSHIP</span><h1>Create your account</h1><p>Register as a library member.</p>
+ <label class="field">Full name<input id="regName" autocomplete="name"></label><label class="field">Email<input id="regEmail" type="email" autocomplete="email"></label>
+ <label class="field">Password<input id="regPassword" type="password" autocomplete="new-password"></label><label class="field">Confirm password<input id="regConfirm" type="password" autocomplete="new-password"></label>
+ <button class="primary full" onclick="registerAction()">Create account →</button><p style="text-align:center">Already registered? <button class="ghost" onclick="go('login')">Sign in</button></p></div></div>`;
+}
+
+function dashboard(){
+ const loans=state.borrowings.filter(x=>x.user_id===state.user.id);
+ const active=loans.filter(x=>['borrowed','overdue'].includes(x.status));
+ return `<section class="page"><div class="section-head"><div><span class="eyebrow">MY ROYAL LIBRARY</span><h1>Welcome, ${esc(state.user.name)}</h1></div></div>
+ <div class="member-nav">${['overview','profile','interests','notifications'].map(x=>`<button class="${state.memberTab===x?'active':''}" onclick="state.memberTab='${x}';render()">${x[0].toUpperCase()+x.slice(1)}</button>`).join('')}</div>
+ ${state.memberTab==='profile'?profileView():state.memberTab==='interests'?interestsView():state.memberTab==='notifications'?notificationsView():memberOverview(active,loans)}</section>`;
+}
+
+function memberOverview(active,loans){
+ return `<div class="metrics"><div class="metric"><span>Active loans</span><b>${active.length}</b></div><div class="metric"><span>Favourites</span><b>${state.favourites.length}</b></div><div class="metric"><span>History</span><b>${loans.length}</b></div><div class="metric"><span>Notifications</span><b>${state.notifications.filter(x=>!x.is_read).length}</b></div></div>
+ <div class="dashboard-grid" style="margin-top:18px"><div class="panel"><h3>Current loans</h3>${active.map(x=>{const b=state.books.find(y=>y.id===x.book_id);return `<div class="loan"><div class="mini">${initials(b?.title)}</div><div><b>${esc(b?.title||'Unknown')}</b><span>Due ${dateOnly(x.due_date)} · ${overdue(x)?'Overdue':'Borrowed'}</span></div><button onclick="returnBook('${x.id}')">Return</button></div>`}).join('')||'<p>No active loans.</p>'}</div>
+ <div class="panel"><h3>Recommended for you</h3>${recommendations().slice(0,5).map(b=>`<div class="loan" onclick="details('${b.id}')"><div class="mini">${initials(b.title)}</div><div><b>${esc(b.title)}</b><span>${esc(b.author)} · ${esc(b.category)}</span></div></div>`).join('')||'<p>No recommendations yet.</p>'}</div></div>`;
+}
+
+function recommendations(){
+ const pref=new Set(state.preferences.map(id=>getCategory(id)));
+ const borrowed=new Set(state.borrowings.map(x=>x.book_id));
+ return [...state.books].filter(b=>!borrowed.has(b.id)).sort((a,b)=>{
+   const pa=pref.has(a.category)?1:0,pb=pref.has(b.category)?1:0;return pb-pa;
+ });
+}
+
+function profileView(){
+ return `<div class="profile-grid"><div class="panel"><h3>Profile</h3><label class="field">Full name<input id="pn" value="${esc(state.user.name)}"></label><label class="field">Email<input id="pe" value="${esc(state.user.email)}"></label><button class="primary" onclick="saveProfile()">Save profile</button></div>
+ <div class="panel"><h3>Change password</h3><label class="field">New password<input id="newPassword" type="password"></label><label class="field">Confirm password<input id="confirmPassword" type="password"></label><button class="primary" onclick="changePassword()">Change password</button></div></div>`;
+}
+function interestsView(){
+ return `<div class="panel"><h3>Reading interests</h3><p>Select categories to improve recommendations.</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${state.categories.map(c=>`<label style="padding:10px;background:#f5f6f1;border-radius:9px"><input class="pref-check" type="checkbox" value="${c.id}" ${state.preferences.includes(c.id)?'checked':''}> ${esc(c.name)}</label>`).join('')}</div><button class="primary" style="margin-top:18px" onclick="savePreferences()">Save interests</button></div>`;
+}
+function notificationsView(){
+ return `<div class="panel"><h3>Notifications</h3>${state.notifications.map(n=>`<div class="loan"><div><b>${esc(n.title||'Library notification')}</b><span>${esc(n.message||'')} · ${dateOnly(n.created_at)}</span></div></div>`).join('')||'<p>No notifications.</p>'}</div>`;
+}
+
+function adminShell(content){
+ return `<div class="admin-shell"><aside class="admin-side">${['overview','books','members','loans','reports'].map(x=>`<button class="${state.adminTab===x?'active':''}" onclick="state.adminTab='${x}';state.editingBook=null;render()">${x[0].toUpperCase()+x.slice(1)}</button>`).join('')}</aside><main class="admin-main">${content}</main></div>`;
+}
+function adminHeader(title,sub){return `<div class="admin-top"><div><h1>${esc(title)}</h1><p>${esc(sub)}</p></div></div>`}
+function adminOverview(){
+ const active=state.borrowings.filter(x=>['borrowed','overdue'].includes(x.status)),over=active.filter(overdue);
+ return adminShell(adminHeader('Control centre','Manage Royal Library')+`<div class="admin-card-grid"><div class="admin-stat"><small>Total titles</small><strong>${state.books.length}</strong></div><div class="admin-stat"><small>Members</small><strong>${state.users.filter(x=>x.role==='member').length}</strong></div><div class="admin-stat"><small>Active loans</small><strong>${active.length}</strong></div><div class="admin-stat"><small>Overdue</small><strong>${over.length}</strong></div></div><div class="admin-cols"><div class="panel"><h3>Recent borrowing</h3>${state.borrowings.slice(0,8).map(x=>{const b=state.books.find(y=>y.id===x.book_id),u=state.users.find(y=>y.id===x.user_id);return `<div class="loan"><div class="mini">${initials(b?.title)}</div><div><b>${esc(b?.title||'Unknown')}</b><span>${esc(u?.full_name||'Unknown')} · ${esc(x.status)}</span></div></div>`}).join('')||'<p>No borrowing activity.</p>'}</div><div class="panel"><h3>Catalogue</h3><p>${state.books.length} titles and ${state.books.reduce((n,b)=>n+(b.total_copies||0),0)} total copies.</p><button class="primary" onclick="state.adminTab='books';render()">Manage books</button></div></div>`);
+}
+function bookForm(){
+ const b=state.editingBook||{};
+ return `<div class="panel" style="margin-bottom:18px"><h3>${state.editingBook?'Edit book':'Add book'}</h3><div class="form-grid">
+ <label class="field">Title<input id="bt" value="${esc(b.title||'')}"></label><label class="field">Author<input id="ba" value="${esc(b.author||'')}"></label>
+ <label class="field">Category<select id="bc"><option value="">Uncategorized</option>${state.categories.map(c=>`<option value="${c.id}" ${b.category_id===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label>
+ <label class="field">Copies<input id="bcopies" type="number" min="1" value="${b.total_copies||1}"></label>
+ <label class="field">ISBN<input id="bi" value="${esc(b.isbn||'')}"></label><label class="field">Keywords<input id="bk" value="${esc((b.keywords||[]).join(', '))}"></label>
+ <label class="field wide">Description<textarea id="bd" rows="3">${esc(b.description||'')}</textarea></label></div>
+ <button class="primary" onclick="saveBook()">Save book</button> ${state.editingBook?'<button class="ghost" onclick="state.editingBook=null;render()">Cancel</button>':''}</div>`;
+}
+function adminBooks(){
+ return adminShell(adminHeader('Books','Manage catalogue records and copies')+bookForm()+`<div class="panel"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Book</th><th>Category</th><th>Copies</th><th>Action</th></tr></thead><tbody>${state.books.map(b=>`<tr><td><b>${esc(b.title)}</b><br>${esc(b.author)}</td><td>${esc(b.category)}</td><td>${b.available_copies}/${b.total_copies}</td><td><button class="admin-btn" onclick="state.editingBook=state.books.find(x=>x.id==='${b.id}');render()">Edit</button> <button class="admin-btn danger" onclick="deleteBook('${b.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="4">No books.</td></tr>'}</tbody></table></div></div>`);
+}
+function adminMembers(){
+ return adminShell(adminHeader('Members','Manage registered library members')+`<div class="panel"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Action</th></tr></thead><tbody>${state.users.filter(u=>u.role==='member').map(u=>`<tr><td>${esc(u.full_name)}</td><td>${esc(u.email||'')}</td><td><span class="status-pill ${u.status==='active'?'status-green':'status-red'}">${esc(u.status)}</span></td><td><button class="admin-btn" onclick="toggleMember('${u.id}')">${u.status==='active'?'Suspend':'Activate'}</button></td></tr>`).join('')||'<tr><td colspan="4">No members.</td></tr>'}</tbody></table></div></div>`);
+}
+function adminLoans(){
+ return adminShell(adminHeader('Borrowing & returns','Monitor circulation and due dates')+`<div class="panel"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Member</th><th>Book</th><th>Borrowed</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody>${state.borrowings.map(x=>{const b=state.books.find(y=>y.id===x.book_id),u=state.users.find(y=>y.id===x.user_id);return `<tr><td>${esc(u?.full_name||'Unknown')}</td><td>${esc(b?.title||'Unknown')}</td><td>${dateOnly(x.borrow_date)}</td><td>${dateOnly(x.due_date)}</td><td>${esc(x.status)}</td><td>${['borrowed','overdue'].includes(x.status)?`<button class="admin-btn" onclick="returnBook('${x.id}')">Return</button>`:'—'}</td></tr>`}).join('')||'<tr><td colspan="6">No transactions.</td></tr>'}</tbody></table></div></div>`);
+}
+function adminReports(){
+ const total=state.borrowings.length,returned=state.borrowings.filter(x=>x.status==='returned').length;
+ return adminShell(adminHeader('Reports & analytics','Circulation summary')+`<div class="admin-card-grid"><div class="admin-stat"><small>Titles</small><strong>${state.books.length}</strong></div><div class="admin-stat"><small>Transactions</small><strong>${total}</strong></div><div class="admin-stat"><small>Returned</small><strong>${returned}</strong></div><div class="admin-stat"><small>Return rate</small><strong>${total?Math.round(returned/total*100):0}%</strong></div></div><div class="panel"><h3>Audit log</h3>${state.audit.map(a=>`<div class="loan"><div><b>${esc(a.action||'Activity')}</b><span>${esc(JSON.stringify(a.details||{}))} · ${dateOnly(a.created_at)}</span></div></div>`).join('')||'<p>No administrative activity.</p>'}</div>`);
+}
+function admin(){return state.adminTab==='books'?adminBooks():state.adminTab==='members'?adminMembers():state.adminTab==='loans'?adminLoans():state.adminTab==='reports'?adminReports():adminOverview()}
+
+function go(page){state.page=page;render()}
+function render(){
+ let content='';
+ if(state.page==='home')content=home();
+ else if(state.page==='catalog')content=catalogue();
+ else if(state.page==='details')content=detail();
+ else if(state.page==='login')content=login();
+ else if(state.page==='register')content=register();
+ else if(state.page==='dashboard')content=state.user?dashboard():login();
+ else if(state.page==='admin')content=state.user?.role==='admin'?admin():login();
+ document.getElementById('app').innerHTML=header()+content+`<footer class="footer">Royal Library — Digital Library Management & Personalized Book Recommendation System</footer>`+(state.toast?`<div class="toast">${esc(state.toast.message)}</div>`:'');
+}
+
+/* ---------- connection diagnostics ---------- */
+async function diagnose(){
+ console.log('Royal Library Supabase configuration:',{url:SUPABASE_URL,keyPresent:!!SUPABASE_KEY});
+ try{
+   const {data,error}=await renderAuthRemoved.getSession();
+   console.log('Supabase auth test:',{data,error});
+ }catch(e){console.error('SUPABASE NETWORK ERROR:',e)}
+}
+
+renderAuthRemoved.onAuthStateChange(async()=>{await loadPublic();await loadUser();render()});
+
+(async function boot(){
+ try{
+   const ok=await loadPublic();
+   if(ok)await loadUser();
+ }catch(e){console.error('BOOT ERROR',e)}
+ render();
+ diagnose();
+})();
 </script>
-</body></html>
+</body>
+</html>
