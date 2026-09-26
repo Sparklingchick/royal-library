@@ -1,0 +1,27 @@
+ROYAL LIBRARY — UPLOAD READY
+
+This package is prepared for:
+GitHub Pages (frontend hosting) + Supabase (database/auth/backend).
+
+IMPORTANT:
+1. Do NOT add a Supabase service-role/secret key to the frontend.
+2. The only account-specific values needed are:
+   VITE_SUPABASE_URL
+   VITE_SUPABASE_PUBLISHABLE_KEY
+3. The database schema is in:
+   supabase/schema.sql
+4. GitHub Pages deployment is configured in:
+   .github/workflows/deploy.yml
+
+For GitHub Actions, add these repository secrets:
+VITE_SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY
+
+Then enable GitHub Pages:
+Settings -> Pages -> Build and deployment -> Source: GitHub Actions
+
+Expected site:
+https://sparklingchick.github.io/royal-library/
+
+Supabase Auth URL configuration should use:
+https://sparklingchick.github.io/royal-library/
